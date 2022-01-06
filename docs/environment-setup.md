@@ -25,9 +25,25 @@ Install the `wget` tool, which is not installed on OS X by default:
 
 - `brew install wget`
 
-### Linux
+## Python
 
-(Dev environment instructions for Linux missing)
+Ensure you have python3 installed and ready to use. All `python` commands below assume `python3`. 
+
+### OSX
+
+`brew install pyenv`
+`pyenv install <latest>` (where latest is the latest version, can be determined running `pyenv install -l`)
+`pyenv global <latest>` (set global version defaul)
+`pyenv version` (to verify it worked)
+
+add the following to your `.zshrc` or `.bash_profile`
+
+```
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init --path)"
+  eval "$(pyenv init -)"
+fi
+```
 
 ## Pip and Virtualenv
 
@@ -38,72 +54,31 @@ Each virtualenv contains its own install of pip, but you need pip to be
 installed globally in order to install virtualenv and virtualenvwrapper (or, at
 least, this is the easiest way to get those dependencies). 
 
-optionally remove old/crusty versions:
-- `sudo apt-get purge python-pip`
-
-then get current version (url from http://www.pip-installer.org/en/latest/installing.html)
-- `cd /tmp`
-- `wget https://raw.github.com/pypa/pip/master/contrib/get-pip.py`
-- `sudo python get-pip.py`
+Install pip following instructions at https://pip.pypa.io/en/latest/installation/. 
 
 optionally verify your install
 - `pip --version`
 
-install virtualenv and (if you want to stay sane) virtualenvwrapper:
-- `sudo pip install virtualenv` (harmless if virtualenv is already installed)
-- `sudo pip install virtualenvwrapper`
-
-add these to your ~/.bashrc (~/.bash_profile if one OS X) (create this file if it doesn't exist):
-- `export WORKON_HOME="~/envs"` (or whatever you want to name the directory)
-- `source /usr/local/bin/virtualenvwrapper.sh` (the path should match the path printed by the pip installer for virtualenvwrapper). 
-
-don't forget to source the bashrc file now:
-- `source ~/.bashrc` (or `source ~/.bash_profile` if that's the file you used)
+Decide on a virtual environment manager. python 3.3+ includes `venv` by
+default. alternatively, you can also use `virtualenv` and (if you want to stay
+sane) `virtualenvwrapper`. 
 
 ## Node
 
 ### OSX
-???
+
+Install Node and NPM from https://nodejs.org/en/download/
 
 ### Debian
 Install npm e.g. as per https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-debian-
 
 ## Required Libs:
-### OSX
-???
-### Debian
-
-`sudo apt-get install python-dev libxslt-dev libxml2-dev node-less`
-
-## PIL
-PIL is a requirement, but in order for it to compile with JPG support, you must have a system-wide library called libjpeg62-dev. 
-
-### OS X
-
-Install the missing libjpeg library. You will need X Code installed with the
-extra "command line tools" component as described above. 
-
-* `cd /tmp`
-* Download the package at [http://www.ijg.org/files/jpegsrc.v8c.tar.gz](http://www.ijg.org/files/jpegsrc.v8c.tar.gz) to the /tmp directory. 
-* Unpack this package (`tar -xzvf jpegsrc.v8c.tar.gz`) and cd into the unpacked folder `cd jpeg-8c`
-* Compile and install it: 
-	* `./configure`
-	* `make`
-	* `sudo make install`
-
-Then either install PIL using `brew`, or from the dmg's available on the PIL website. for example, see the process outlined [here](http://stackoverflow.com/questions/9070074/how-to-install-pil-on-mac-os-x-10-7-2-lion)
 
 ### Debian
 
-- `sudo apt-get install libjpeg62-turbo-dev`
+(Possibly deprecated??)
 
-Old docs, not required for jessie? remove this section?
-
-> you may need to symlink these libraries for PIL to find them during the install:
->
-> `sudo ln -s /usr/lib/x86_64-linux-gnu/libfreetype.so /usr/lib/`
-> `sudo ln -s /usr/lib/x86_64-linux-gnu/libz.so /usr/lib/`
-> `sudo ln -s /usr/lib/x86_64-linux-gnu/libjpeg.so /usr/lib/`
+`sudo apt-get install python-dev libxslt-dev libxml2-dev node-less` 
 
 ## Supporting Services
 
