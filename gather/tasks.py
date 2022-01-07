@@ -4,7 +4,7 @@ import datetime
 from django.utils import timezone
 from django.contrib.sites.models import Site
 from django.template.loader import get_template
-from django.core import urlresolvers
+from django.urls import reverse
 from itertools import chain
 import logging
 
@@ -27,7 +27,7 @@ weekday_number_to_name = {
 
 
 def send_events_list(user, event_list, location):
-    profile_url = urlresolvers.reverse('user_detail', args=(user.username, ))
+    profile_url = reverse('user_detail', args=(user.username, ))
     footer = 'You are receiving this email because your preferences for event reminders are on. To turn them off, visit %s' % profile_url
     sender = location.from_email()
     subject = '[' + location.email_subject_prefix + ']' + ' Reminder of your events today'
@@ -56,7 +56,7 @@ def send_events_list(user, event_list, location):
 
 
 def weekly_reminder_email(user, event_list, location):
-    profile_url = urlresolvers.reverse('user_detail', args=(user.username, ))
+    profile_url = reverse('user_detail', args=(user.username, ))
     location_name = location.name
     current_tz = timezone.get_current_timezone()
     today_local = timezone.now().astimezone(current_tz).date()

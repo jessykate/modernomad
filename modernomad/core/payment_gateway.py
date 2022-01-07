@@ -1,6 +1,5 @@
 from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
-from django.core import urlresolvers
+from django.urls import reverse
 from modernomad.core.models import Booking, Payment
 from django.conf import settings
 from django.utils import timezone
@@ -50,7 +49,7 @@ def issue_refund(payment, amount=None):
 ###################################################################
 
 def charge_description(booking):
-    booking_url = "https://" + Site.objects.get_current().domain + urlresolvers.reverse('booking_detail', args=(booking.use.location.slug, booking.id))
+    booking_url = "https://" + Site.objects.get_current().domain + reverse('booking_detail', args=(booking.use.location.slug, booking.id))
     descr = "%s from %s - %s. Details: %s." % (booking.use.user.get_full_name(),
             str(booking.use.arrive), str(booking.use.depart), booking_url)
     return descr

@@ -34,7 +34,7 @@ class Account(models.Model):
             (DEBIT, 'Debit'),
         )
 
-    currency = models.ForeignKey(Currency, related_name="accounts")
+    currency = models.ForeignKey(Currency, on_delete=models.CASCADE, related_name="accounts")
     admins = models.ManyToManyField(User, verbose_name="Admins (optional)",
             related_name='accounts_administered', blank=True, help_text="May be blank"
         )
@@ -76,17 +76,16 @@ class Account(models.Model):
 class SystemAccounts(models.Model):
     # money coming into or out of the system (either due to real transfers or
     # minting) is recorded in these accounts.
-    currency = models.OneToOneField(Currency)
-    credit = models.OneToOneField(Account, related_name="+")
-    debit = models.OneToOneField(Account, related_name="+")
-
+    currency = models.OneToOneField(Currency, on_delete=models.CASCADE)
+    credit = models.OneToOneField(Account, on_delete=models.CASCADE, related_name="+")
+    debit = models.OneToOneField(Account, on_delete=models.CASCADE, related_name="+")
 
 class Transaction(models.Model):
     reason = models.CharField(max_length=200)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     date = models.DateTimeField(default=timezone.now)
-    approver = models.ForeignKey(User, related_name="approved_transactions", blank=True, null=True)
+    approver = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="approved_transactions", blank=True, null=True)
     valid = models.BooleanField(default=False)
 
     def __str__(self):
@@ -132,9 +131,9 @@ class Transaction(models.Model):
         return resp['amount__sum']
 
 class Entry(models.Model):
-    account = models.ForeignKey(Account, related_name="entries")
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="entries")
     amount = models.IntegerField()
-    transaction = models.ForeignKey(Transaction, related_name="entries")
+    transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE, related_name="entries")
     # a transaction will always be invalid until it is linked to a second one
     # through a transaction. because the objects get saved in serial, we can't
     # avoid a temporary invalid state.

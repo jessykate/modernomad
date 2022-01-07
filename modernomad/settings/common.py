@@ -155,7 +155,7 @@ TEMPLATES = [
 },
 ]
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'whitenoise.middleware.WhiteNoiseMiddleware', # first, after SecurityMiddleware
     'basicauth.middleware.BasicAuthMiddleware',
     'django.middleware.common.CommonMiddleware',

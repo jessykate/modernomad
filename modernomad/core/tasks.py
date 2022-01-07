@@ -6,7 +6,7 @@ from django.contrib.sites.models import Site
 import datetime
 import requests
 import json
-from django.core import urlresolvers
+from django.urls import reverse
 
 import logging
 logger = logging.getLogger(__name__)
@@ -95,7 +95,7 @@ def _format_attachment(use, color):
     else:
         profile_img_url = domain+"/static/img/default.jpg"
     booking_url = '<%s%s|%s - %s in %s>\n%s' % (domain, use.booking.get_absolute_url(), use.arrive.strftime("%B %d"), use.depart.strftime("%B %d"), use.resource.name, use.user.profile.bio)
-    profile_url = domain + urlresolvers.reverse('user_detail', args=(use.user.username,)),
+    profile_url = domain + reverse('user_detail', args=(use.user.username,)),
     item = {
             'color': color,
             'fallback': use.user.get_full_name(),

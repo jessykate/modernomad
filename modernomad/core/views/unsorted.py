@@ -12,7 +12,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from modernomad.core.forms import BookingUseForm, AdminBookingForm, UserProfileForm, SubscriptionEmailTemplateForm
 from modernomad.core.forms import BookingEmailTemplateForm, PaymentForm, AdminSubscriptionForm, LocationSettingsForm
 from modernomad.core.forms import LocationUsersForm, LocationContentForm, LocationPageForm, LocationMenuForm, LocationRoomForm
-from django.core import urlresolvers
 from django.contrib import messages
 from django.conf import settings
 from modernomad.core.decorators import house_admin_required, resident_or_admin_required
@@ -42,7 +41,7 @@ from modernomad.core.booking_calendar import GuestCalendar
 from modernomad.core.emails.messages import send_booking_receipt, send_subscription_receipt, new_booking_notify
 from modernomad.core.emails.messages import updated_booking_notify, send_from_location_address, admin_new_subscription_notify
 from modernomad.core.emails.messages import subscription_note_notify
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from modernomad.core.models import get_location
 from django.shortcuts import get_object_or_404
 from django.template.loader import get_template

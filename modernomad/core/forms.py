@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django import forms
 from django.utils.text import slugify
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.template import Template, Context
 from modernomad.core.models import UserProfile, Use, Booking, EmailTemplate, Resource, Location, LocationMenu, Subscription, Subscription
 from django.contrib.sites.models import Site

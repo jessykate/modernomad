@@ -8,7 +8,7 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render
 from django.contrib import messages
 from django.conf import settings
 from django.db.models import Q
@@ -16,7 +16,7 @@ from gather.models import Event, EventAdminGroup, EventSeries
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import get_template
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.shortcuts import get_object_or_404
 
 from gather.forms import EventForm, EventEmailTemplateForm

@@ -1,5 +1,5 @@
 from django_ical.views import ICalFeed
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from gather.models import Event
 from modernomad.core.models import Location
 from django.shortcuts import get_object_or_404
