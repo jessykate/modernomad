@@ -45,6 +45,9 @@ configured for.
 
 
 ## Configuration settings
+
+cp `.env.example .env` to create the local environment variables. 
+
 If there is any local settings that you'd like to overwrite while developing you can always overwrite those in `settings/local.py`. Otherwise the project is set up to the biggest possible extent to use environment variables.
 
 ### settings you must configure, and dependant services:
