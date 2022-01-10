@@ -156,6 +156,8 @@ TEMPLATES = [
 ]
 
 MIDDLEWARE = (
+    'corsheaders.middleware.CorsMiddleware',
+    #'modernomad.middleware.crossdomainxhr.CORSMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware', # first, after SecurityMiddleware
     'basicauth.middleware.BasicAuthMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -164,7 +166,6 @@ MIDDLEWARE = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
-    'modernomad.middleware.crossdomainxhr.CORSMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -206,6 +207,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rules.apps.AutodiscoverRulesConfig',
     'webpack_loader',
+    'corsheaders',
 
     # modernomad
     'modernomad.core',
@@ -299,4 +301,7 @@ if env('BASICAUTH_USER', default=''):
     BASICAUTH_USERS[env('BASICAUTH_USER')] = env('BASICAUTH_PASS')
 else:
     BASICAUTH_DISABLE = True
+
+#DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
