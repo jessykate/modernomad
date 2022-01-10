@@ -11,7 +11,7 @@ from gather.models import EventNotifications
 from .user import UserFactory, SuperUserFactory
 
 
-class EventAdminGroupFactory(factory.DjangoModelFactory):
+class EventAdminGroupFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = EventAdminGroup
 
@@ -31,7 +31,7 @@ class EventAdminGroupFactory(factory.DjangoModelFactory):
             self.users.add(SuperUserFactory())
 
 
-class EventSeriesFactory(factory.DjangoModelFactory):
+class EventSeriesFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = EventSeries
 
@@ -39,7 +39,7 @@ class EventSeriesFactory(factory.DjangoModelFactory):
     description = factory.Faker('paragraph')
 
 
-class EventFactory(factory.DjangoModelFactory):
+class EventFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Event
 
@@ -97,7 +97,7 @@ class EventFactory(factory.DjangoModelFactory):
                 self.endorsements.add(users)
 
 
-class EventNotificationFactory(factory.DjangoModelFactory):
+class EventNotificationFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = EventNotifications
 

@@ -9,7 +9,7 @@ from .location import ResourceFactory
 from .location import FeeFactory
 
 
-class SubscriptionFactory(factory.DjangoModelFactory):
+class SubscriptionFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = models.Subscription
 
@@ -27,7 +27,7 @@ class SubscriptionFactory(factory.DjangoModelFactory):
     end_date = factory.Faker('future_date', tzinfo=pytz.UTC)
 
 
-class BillFactory(factory.DjangoModelFactory):
+class BillFactory(factory.django.DjangoModelFactory):
     '''Bookings, BillLineItem or Subscription'''
     class Meta:
         model = models.Bill
@@ -36,7 +36,7 @@ class BillFactory(factory.DjangoModelFactory):
     comment = factory.Faker('paragraph')
 
 
-class SubscriptionBillFactory(factory.DjangoModelFactory):
+class SubscriptionBillFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = models.SubscriptionBill
 
@@ -48,7 +48,7 @@ class SubscriptionBillFactory(factory.DjangoModelFactory):
     subscription = factory.SubFactory(SubscriptionFactory)
 
 
-class BookingBillFactory(factory.DjangoModelFactory):
+class BookingBillFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = models.BookingBill
 
@@ -56,7 +56,7 @@ class BookingBillFactory(factory.DjangoModelFactory):
     comment = factory.Faker('paragraph')
 
 
-class BillLineItem(factory.DjangoModelFactory):
+class BillLineItem(factory.django.DjangoModelFactory):
     class Meta:
         model = models.BillLineItem
 
@@ -69,7 +69,7 @@ class BillLineItem(factory.DjangoModelFactory):
     custom = factory.Faker('pybool')
 
 
-class UseFactory(factory.DjangoModelFactory):
+class UseFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = models.Use
 
@@ -89,7 +89,7 @@ class UseFactory(factory.DjangoModelFactory):
     accounted_by = models.Use.FIAT
 
 
-class BookingFactory(factory.DjangoModelFactory):
+class BookingFactory(factory.django.DjangoModelFactory):
     # deprecated fields not modeled in factory
     class Meta:
         model = models.Booking
@@ -116,7 +116,7 @@ class BookingFactory(factory.DjangoModelFactory):
                 self.suppressed_fees.add(fee)
 
 
-class PaymentFactory(factory.DjangoModelFactory):
+class PaymentFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = models.Payment
 
@@ -130,11 +130,11 @@ class PaymentFactory(factory.DjangoModelFactory):
     last4 = factory.Faker('pyint')
 
 
-class UseNoteFactory(factory.DjangoModelFactory):
+class UseNoteFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = models.UseNote
 
 
-class SubscriptionNoteFactory(factory.DjangoModelFactory):
+class SubscriptionNoteFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = models.SubscriptionNote
