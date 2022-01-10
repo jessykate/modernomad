@@ -1,0 +1,80 @@
+#!/bin/bash
+
+set -e
+
+echo "Installing project dependencies"
+# Check that brew is installed
+if ! command -v brew &> /dev/null
+then
+  echo 'installing homebrew'
+  curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
+fi
+
+mkdir -p ~/.nvm
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Check that nvm is installed
+if ! command -v nvm &> /dev/null
+then
+  echo 'installing nvm'
+  brew install nvm
+fi
+
+nvm install 16.13.1
+nvm use 16.13.1
+
+# Check that wget is installed
+if ! command -v wget &> /dev/null
+then
+  echo 'installing wget'
+  brew install wget
+fi
+
+# Check that psql is installed
+if ! command -v wget &> /dev/null
+then
+  echo 'installing postgresql'
+  brew install postgresql
+fi
+
+
+# Check that pyenv is installed
+if ! command -v pyenv &> /dev/null
+then
+  echo 'installing pyenv'
+  brew install pyenv
+  echo 'MANUAL STEP: please add pyenv shell configuration commands. See https://github.com/pyenv/pyenv#basic-github-checkout for more information'
+fi
+
+# List python versions, grab latest, trim the string
+LATEST_PYTHON_VERSION=$(pyenv install -l | grep -E "^[0-9\.  ]+$" | tail -n 1 | xargs)
+CURRENT_PYTHON_VERSION=$(python --version | perl -X -pi.bak -e 's/Python //g;')
+
+if ! [ "$CURRENT_PYTHON_VERSION" = "$LATEST_PYTHON_VERSION" ]
+then
+  pyenv install "$LATEST_PYTHON_VERSION"
+  pyenv global "$LATEST_PYTHON_VERSION"
+fi
+
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+
+if ! command -v pip &> /dev/null
+then
+  echo 'installing pip'
+  python -m ensurepip --upgrade
+fi
+
+python -m venv .venv
+source .venv/bin/activate
+
+# STATIC_DEPS=true pip install lxml
+STATIC_DEPS=true pip install -r requirements.txt
+
+cd ./client
+npm install
+npm install -g less
+
+
