@@ -1,5 +1,5 @@
 import graphene
-from graphene import AbstractType, Field, Node
+from graphene import ObjectType, Field, Node
 from graphene_django.types import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 
@@ -29,5 +29,5 @@ class UserNode(DjangoObjectType):
         return "/people/" + self.username
 
 
-class Query(AbstractType):
+class Query(ObjectType):
     all_users = DjangoFilterConnectionField(UserNode)

@@ -1,4 +1,4 @@
-from graphene import AbstractType, Field, Node, List, Boolean
+from graphene import ObjectType, Field, Node, List, Boolean
 from graphene_django.types import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 
@@ -14,7 +14,8 @@ class FeeNode(DjangoObjectType):
 
 class LocationNode(DjangoObjectType):
     fees = List(lambda: FeeNode, paid_by_house=Boolean())
-    resources = List(lambda: ResourceNode, has_future_capacity=Boolean(), has_future_drft_capacity=Boolean())
+    resources = List(lambda: ResourceNode, has_future_capacity=Boolean(
+    ), has_future_drft_capacity=Boolean())
 
     class Meta:
         model = Location
@@ -37,7 +38,5 @@ class LocationNode(DjangoObjectType):
         return resources
 
 
-
-
-class Query(AbstractType):
+class Query(ObjectType):
     all_locations = DjangoFilterConnectionField(LocationNode)

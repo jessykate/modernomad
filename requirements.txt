@@ -2,7 +2,7 @@ django-compressor
 django-debug-toolbar
 django-environ
 django-extensions
-django-filter
+django-filter>=3.0.0b7
 django-flatpages-tinymce
 django-ical
 django-imagekit
@@ -21,6 +21,7 @@ icalendar
 lxml
 markdown
 maya
+psycopg2
 psycopg2-binary
 python-dateutil
 pytz

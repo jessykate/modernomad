@@ -1,5 +1,5 @@
 import graphene
-from graphene import AbstractType, Field, Node
+from graphene import ObjectType, Field, Node
 from graphene_django.types import DjangoObjectType
 from graphene.types import String
 from graphene_django.filter import DjangoFilterConnectionField
@@ -51,7 +51,7 @@ class OccupantNode(DjangoObjectType):
         return "guest"
 
 
-class Query(AbstractType):
+class Query(ObjectType):
     my_occupancies = DjangoFilterConnectionField(OccupantNode)
     my_current_occupancies = DjangoFilterConnectionField(OccupantNode)
 

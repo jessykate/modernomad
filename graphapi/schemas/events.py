@@ -1,5 +1,5 @@
 import graphene
-from graphene import AbstractType, Field, Node
+from graphene import ObjectType, Field, Node
 from graphene_django.types import DjangoObjectType
 from gather.models import Event
 from graphene_django.filter import DjangoFilterConnectionField
@@ -16,6 +16,6 @@ class EventNode(DjangoObjectType):
         return "/locations/" + self.location.slug + "/events/" + str(self.id) + "/" + self.slug + "/"
 
 
-class Query(AbstractType):
+class Query(ObjectType):
     # event = relay.NodeField(EventNode)
     all_events = DjangoFilterConnectionField(EventNode)
