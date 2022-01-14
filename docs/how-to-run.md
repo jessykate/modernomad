@@ -36,7 +36,7 @@ To get webpack to work locally you should be able to do
 Then to run the webpack dev server. Run the following command.
 It'll now serve the javascript from localhost:3000 which is what django is
 configured for.
-- `node_modules/.bin/webpack-dev-server --port 3000 -w`
+- `node_modules/.bin/webpack-dev-server --port 3000`
 
 @todo This is a fix to make webpack work. Configuration needs tidying up by whoever knows how webpack works.
 - `cp webpack-stats-prod.json webpack-stats.json`
