@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
 import _ from 'lodash'
-import DATEFORMAT from './constants'
+import { DATEFORMAT } from './constants'
 
 function momentUnlessNull(dateString, parseFormat = null) {
 

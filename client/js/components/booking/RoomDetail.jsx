@@ -12,7 +12,7 @@ import _ from 'lodash'
 import nl2br from 'react-nl2br'
 import { isFullyAvailable } from '../../models/Availabilities'
 import makeParam from '../generic/Utils'
-import DATEFORMAT from './constants'
+import { DATEFORMAT } from './constants'
 
 export default class RoomDetail extends React.Component {
 

@@ -6,7 +6,7 @@ import RoomDetail from './RoomDetail'
 import _ from 'lodash'
 import moment from 'moment'
 import makeParam from '../generic/Utils'
-import DATEFORMAT from './constants'
+import { DATEFORMAT } from './constants'
 
 
 class RoomIndexOrDetailWithoutQuery extends React.Component {

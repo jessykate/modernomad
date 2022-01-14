@@ -9,7 +9,7 @@ import DjangoCSRFInput from '../generic/DjangoCSRFInput'
 import BookingDisplay from './BookingDisplay'
 import { Booking } from '../../models/Booking'
 import makeParam from '../generic/Utils'
-import DATEFORMAT from './constants'
+import { DATEFORMAT } from './constants'
 
 
 export default class BookingForm extends React.Component {
