@@ -41,8 +41,8 @@
     "react-loader-advanced": "^1.4.1",
     "react-money-component": "^1.4.6",
     "react-nl2br": "^1.0.2",
-    "react-router-dom": "^4.0.0",
-    "react-tap-event-plugin": "^1.0.0",
+    "react-router-dom": "^6.2.1",
+    "react-tap-event-plugin": "^3.0.3",
     "redux": "^4.1.2",
     "webpack": "5.66.0",
     "webpack-bundle-tracker": "1.1.0"
