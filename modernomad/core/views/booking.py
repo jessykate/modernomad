@@ -125,7 +125,7 @@ class StayView(TemplateView):
         context['location'] = self.location
 
         is_admin = self.location.house_admins.all().filter(pk=self.request.user.pk).exists()
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             user_drft_balance = self.request.user.profile.drft_spending_balance()
         else:
             user_drft_balance = 0
