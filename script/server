@@ -11,4 +11,5 @@ psql postgres -c 'CREATE DATABASE modernomad;'  || true
 
 python manage.py migrate
 
-python manage.py runserver
+python manage.py runserver &
+cd client && node_modules/.bin/webpack-dev-server --port 3000
