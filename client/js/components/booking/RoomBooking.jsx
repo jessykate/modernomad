@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { BrowserRouter, Route } from 'react-router-dom'
 import RoomIndexOrDetail from './RoomIndexOrDetail'
 import RoomDrft from './RoomDrft'

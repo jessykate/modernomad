@@ -1,5 +1,6 @@
 import axios from 'axios'
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import qs from 'qs'
 import RoomIndex from './RoomIndex'
 import RoomDetail from './RoomDetail'
