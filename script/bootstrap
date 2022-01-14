@@ -74,7 +74,7 @@ source .venv/bin/activate
 STATIC_DEPS=true pip install -r requirements.txt
 
 cd ./client
-npm install
 npm install -g less
+npm install
 
 
