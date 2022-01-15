@@ -1,5 +1,6 @@
 import axios from 'axios'
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import moment from 'moment'
 import qs from 'qs'
 
@@ -12,7 +13,7 @@ import _ from 'lodash'
 import nl2br from 'react-nl2br'
 import { isFullyAvailable } from '../../models/Availabilities'
 import makeParam from '../generic/Utils'
-import DATEFORMAT from './constants'
+import { DATEFORMAT } from './constants'
 
 export default class RoomDetail extends React.Component {
 

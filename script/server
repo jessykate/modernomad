@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -e
+
+# Test if file exists
+if ! test -f .env; then
+  cp .env.example .env
+fi
+
+psql postgres -c 'CREATE DATABASE modernomad;'  || true
+
+python manage.py migrate
+
+python manage.py runserver &
+cd client && node_modules/.bin/webpack-dev-server --port 3000

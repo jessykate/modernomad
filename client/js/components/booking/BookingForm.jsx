@@ -1,15 +1,16 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import moment from 'moment'
 import DateRangeSelector from './DateRangeSelector'
 import ImageCarousel from './ImageCarousel'
 import { Link } from 'react-router-dom'
-import { Panel, FormGroup, ControlLabel, FormControl, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Accordion, FormGroup, FormLabel, FormControl, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import DjangoCSRFInput from '../generic/DjangoCSRFInput'
 import BookingDisplay from './BookingDisplay'
 import { Booking } from '../../models/Booking'
 import makeParam from '../generic/Utils'
-import DATEFORMAT from './constants'
+import { DATEFORMAT } from './constants'
 
 
 export default class BookingForm extends React.Component {
@@ -133,7 +134,7 @@ export default class BookingForm extends React.Component {
 
                 <FormGroup validationState={this.validationState()} controlId="formControlsTextarea">
                   <p>*Tell us a little about the purpose of your trip</p>
-                  {this.validationState() == 'error' && <ControlLabel>You must write a purpose for your stay</ControlLabel>}
+                  {this.validationState() == 'error' && <FormLabel>You must write a purpose for your stay</FormLabel>}
                   <FormControl componentClass="textarea" name="purpose" onChange={this.changePurpose.bind(this)} />
                 </FormGroup>
 
@@ -142,12 +143,12 @@ export default class BookingForm extends React.Component {
                     <span className={(this.state.open ? "fa fa-chevron-down" : "fa fa-chevron-right")}></span> Optional fields
                   </a>
                 </p>
-                <Panel collapsible expanded={this.state.open} className="optional-fields">
+                <Accordion collapsible expanded={this.state.open} className="optional-fields">
                   <p>Arrival time</p>
                   <input className="form-control" name="arrival_time" />
                   <p>Comments</p>
                   <textarea className="form-control" name="comments" />
-                </Panel>
+                </Accordion>
               </div>
               :
               <div></div>

@@ -1,12 +1,13 @@
 import axios from 'axios'
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import qs from 'qs'
 import RoomIndex from './RoomIndex'
 import RoomDetail from './RoomDetail'
 import _ from 'lodash'
 import moment from 'moment'
 import makeParam from '../generic/Utils'
-import DATEFORMAT from './constants'
+import { DATEFORMAT } from './constants'
 
 
 class RoomIndexOrDetailWithoutQuery extends React.Component {

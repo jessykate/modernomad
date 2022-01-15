@@ -1,5 +1,5 @@
 import graphene
-from graphene import AbstractType, Field, Node
+from graphene import ObjectType, Field, Node
 from graphene.types.datetime import *
 from graphene_django.types import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
@@ -15,17 +15,21 @@ class AvailabilityNode(graphene.ObjectType):
     date = DateTime()
     quantity = graphene.Int()
 
+
 class BackingNode(DjangoObjectType):
     class Meta:
         model = Backing
         interfaces = (Node, )
 
+
 class ResourceNode(DjangoObjectType):
     rid = graphene.Int()
-    availabilities = graphene.List(lambda: AvailabilityNode, arrive=DateTime(), depart=DateTime())
+    availabilities = graphene.List(
+        lambda: AvailabilityNode, arrive=DateTime(), depart=DateTime())
     backing = graphene.Field(BackingNode)
     has_future_drft_capacity = graphene.Boolean()
-    accept_drft_these_dates = graphene.Boolean(arrive=DateTime(), depart=DateTime())
+    accept_drft_these_dates = graphene.Boolean(
+        arrive=DateTime(), depart=DateTime())
 
     class Meta:
         model = Resource
@@ -57,7 +61,8 @@ class ResourceNode(DjangoObjectType):
 
         return [AvailabilityNode(*availability) for availability in availabilities]
 
-class Query(AbstractType):
+
+class Query(ObjectType):
     all_resources = DjangoFilterConnectionField(ResourceNode)
     all_drft_resources = DjangoFilterConnectionField(ResourceNode)
 

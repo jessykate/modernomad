@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import ReactDom from 'react-dom'
 
 export default class DatePicker extends React.Component {
@@ -9,7 +10,7 @@ export default class DatePicker extends React.Component {
 			dateFormat: "yy-mm-dd"
 		})
     }
-    
+
 	value() {
 		return ReactDom.findDOMNode(this).value
 	}

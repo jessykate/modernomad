@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import RoomCard from './RoomCard'
 import DateRangeSelector from './DateRangeSelector'
 import AvailabilityMatrix from './AvailabilityMatrix'
