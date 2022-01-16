@@ -19,7 +19,7 @@ export NVM_DIR="$HOME/.nvm"
 if ! command -v nvm &> /dev/null
 then
   echo 'installing nvm'
-  brew install nvm
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 fi
 
 # Keep in sync with engines property of package.json files
