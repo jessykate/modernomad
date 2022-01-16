@@ -22,6 +22,7 @@ then
   brew install nvm
 fi
 
+# Keep in sync with engines property of package.json files
 nvm install 16.13.1
 nvm use 16.13.1
 
