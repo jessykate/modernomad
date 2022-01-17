@@ -5,6 +5,8 @@ import moment from 'moment'
 import _ from 'lodash'
 import { DATEFORMAT } from './constants'
 
+import "react-datepicker/dist/react-datepicker.css";
+
 function momentUnlessNull(dateString, parseFormat = null) {
 
   let date = dateString ? moment(dateString, parseFormat) : null
@@ -129,6 +131,7 @@ export default class DateRangeSelector extends React.Component {
             placeholderText="Arrive"
             selectsStart
             className={controlClasses}
+            // popperClassName='test'
             selected={this.state.arrive}
             startDate={this.state.arrive}
             endDate={this.state.depart}

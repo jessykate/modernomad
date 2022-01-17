@@ -34,6 +34,10 @@ module.exports = {
           },
         },
       }, // to transform JSX into JS
+      {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
+      },
     ],
   },
 
