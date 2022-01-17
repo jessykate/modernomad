@@ -8,7 +8,7 @@ from django.conf import settings
 def group_required(*group_names):
     """Requires user membership in at least one of the groups passed in."""
     def in_groups(u):
-        if u.is_authenticated():
+        if u.is_authenticated:
             if bool(u.groups.filter(name__in=group_names)) | u.is_superuser:
                 return True
         return False
@@ -20,9 +20,9 @@ def house_admin_required(original_func):
     def decorator(request, location_slug, *args, **kwargs):
         location = get_location(location_slug)
         user = request.user
-        if user.is_authenticated() and location and user in location.house_admins.all():
+        if user.is_authenticated and location and user in location.house_admins.all():
             return original_func(request, location_slug, *args, **kwargs)
-        elif request.user.is_authenticated():
+        elif request.user.is_authenticated:
             return HttpResponseRedirect("/")
         else:
             from django.contrib.auth.views import redirect_to_login
@@ -38,7 +38,7 @@ def resident_or_admin_required(original_func):
         location = get_location(location_slug)
         user = request.user
         if (
-            user.is_authenticated() and
+            user.is_authenticated and
             location and
             (
                 user in location.residents() or
@@ -47,7 +47,7 @@ def resident_or_admin_required(original_func):
             )
         ):
             return original_func(request, location_slug, *args, **kwargs)
-        elif request.user.is_authenticated():
+        elif request.user.is_authenticated:
             return HttpResponseRedirect("/")
         else:
             from django.contrib.auth.views import redirect_to_login

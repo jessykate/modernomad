@@ -54,7 +54,8 @@ class RoomApiList(mixins.ListModelMixin, generics.GenericAPIView):
 
         def room_available_during_period(room, arrive, depart):
             availabilities = room.daily_availabilities_within(arrive, depart)
-            zero_quantity_dates = [avail for avail in availabilities if avail[1] == 0]
+            zero_quantity_dates = [
+                avail for avail in availabilities if avail[1] == 0]
             if zero_quantity_dates:
                 return False
             return True
@@ -96,11 +97,13 @@ class StayView(TemplateView):
     def get(self, request, *args, **kwargs):
         room_id = kwargs.get('room_id')
         if room_id:
-            self.room = get_qs_or_404(Resource, pk=room_id).select_related('location').first()
+            self.room = get_qs_or_404(
+                Resource, pk=room_id).select_related('location').first()
             self.location = self.room.location
         else:
             self.room = None
-            self.location = get_object_or_404(Location, slug=kwargs.get('location_slug'))
+            self.location = get_object_or_404(
+                Location, slug=kwargs.get('location_slug'))
 
         if not self.location.rooms_with_future_capacity():
             msg = 'Sorry! This location does not currently have any listings.'
@@ -124,12 +127,13 @@ class StayView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['location'] = self.location
 
-        is_admin = self.location.house_admins.all().filter(pk=self.request.user.pk).exists()
+        is_admin = self.location.house_admins.all().filter(
+            pk=self.request.user.pk).exists()
         if self.request.user.is_authenticated:
             user_drft_balance = self.request.user.profile.drft_spending_balance()
         else:
             user_drft_balance = 0
-        
+
         fees = Fee.objects.filter(locationfee__location=self.location)
 
         react_data = {
@@ -159,7 +163,7 @@ def BookingSubmit(request, location_slug):
         use.location = location
         booking = Booking(use=use, comments=comments)
         # reset_rate also generates the bill.
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             use.user = request.user
             if use.suggest_drft():
                 use.accounted_by = Use.DRFT
@@ -180,7 +184,8 @@ def BookingSubmit(request, location_slug):
         else:
             booking_data = booking.serialize()
             request.session['booking'] = booking_data
-            messages.add_message(request, messages.INFO, 'Thank you! Please make a profile to complete your booking request.')
+            messages.add_message(
+                request, messages.INFO, 'Thank you! Please make a profile to complete your booking request.')
             return HttpResponseRedirect(reverse('registration_register'))
     else:
         logger.debug('form was not valid')
@@ -205,9 +210,11 @@ def BookingSubmit(request, location_slug):
 @login_required
 def UserBookings(request, username):
     ''' TODO: rethink permissions here'''
-    user, user_is_house_admin_somewhere = _get_user_and_perms(request, username)
+    user, user_is_house_admin_somewhere = _get_user_and_perms(
+        request, username)
     # uses = Use.objects.filter(user=user).exclude(status='deleted').order_by('arrive')
-    bookings = Booking.objects.filter(use__user=user).exclude(use__status='deleted')
+    bookings = Booking.objects.filter(
+        use__user=user).exclude(use__status='deleted')
     past_bookings = []
     upcoming_bookings = []
     for booking in bookings:
@@ -261,7 +268,8 @@ def BookingDetail(request, booking_id, location_slug):
 
         # users that intersect this stay
         users_during_stay = []
-        uses = Use.objects.filter(status="confirmed").filter(location=location).exclude(depart__lt=use.arrive).exclude(arrive__gt=use.depart)
+        uses = Use.objects.filter(status="confirmed").filter(location=location).exclude(
+            depart__lt=use.arrive).exclude(arrive__gt=use.depart)
         for use in uses:
             if use.user not in users_during_stay:
                 users_during_stay.append(use.user)
@@ -287,7 +295,8 @@ def BookingDetail(request, booking_id, location_slug):
             }
         )
     else:
-        messages.add_message(request, messages.INFO, "You do not have permission to view that booking")
+        messages.add_message(request, messages.INFO,
+                             "You do not have permission to view that booking")
         return HttpResponseRedirect('/404')
 
 
@@ -334,7 +343,7 @@ def BookingEdit(request, booking_id, location_slug):
     original_arrive = booking.use.arrive
     original_depart = booking.use.depart
     original_room = booking.use.resource
-    if request.user.is_authenticated() and request.user == booking.use.user:
+    if request.user.is_authenticated and request.user == booking.use.user:
         logger.debug("BookingEdit: Authenticated and same user")
         if request.user in booking.use.location.house_admins.all():
             is_house_admin = True
@@ -361,13 +370,15 @@ def BookingEdit(request, booking_id, location_slug):
                         booking.use.resource != original_room
                     )
                 ):
-                    logger.debug("booking room or date was changed. updating status.")
+                    logger.debug(
+                        "booking room or date was changed. updating status.")
                     booking.pending()
                     # notify house_admins by email
                     try:
                         updated_booking_notify(booking)
                     except:
-                        logger.debug("Booking %d was updated but admin notification failed to send" % booking.id)
+                        logger.debug(
+                            "Booking %d was updated but admin notification failed to send" % booking.id)
                     client_msg = 'The booking was updated and the new information will be reviewed for availability.'
                 else:
                     client_msg = 'The booking was updated.'
@@ -399,7 +410,7 @@ def BookingEdit(request, booking_id, location_slug):
 def BookingConfirm(request, booking_id, location_slug):
     booking = Booking.objects.get(id=booking_id)
     if not (
-        request.user.is_authenticated() and
+        request.user.is_authenticated and
         request.user == booking.use.user and
         request.method == "POST" and
         booking.is_approved()
@@ -407,7 +418,8 @@ def BookingConfirm(request, booking_id, location_slug):
         return HttpResponseRedirect("/")
 
     if not booking.use.user.profile.customer_id:
-        messages.add_message(request, messages.INFO, 'Please enter payment information to confirm your booking.')
+        messages.add_message(
+            request, messages.INFO, 'Please enter payment information to confirm your booking.')
     else:
         try:
             payment_gateway.charge_booking(booking)
@@ -428,7 +440,8 @@ def BookingConfirm(request, booking_id, location_slug):
                 request,
                 messages.WARNING,
                 'Drat, it looks like there was a problem with your card: %s. Please add a different card on your ' +
-                '<a href="/people/%s/edit/">profile</a>.' % (booking.use.user.username, e)
+                '<a href="/people/%s/edit/">profile</a>.' % (
+                    booking.use.user.username, e)
             )
 
     return HttpResponseRedirect(reverse('booking_detail', args=(location_slug, booking.id)))
@@ -438,13 +451,14 @@ def BookingConfirm(request, booking_id, location_slug):
 def BookingDelete(request, booking_id, location_slug):
     booking = Booking.objects.get(id=booking_id)
     if (
-        request.user.is_authenticated() and
+        request.user.is_authenticated and
         request.user == booking.use.user and
         request.method == "POST"
     ):
         booking.cancel()
 
-        messages.add_message(request, messages.INFO, 'Your booking has been cancelled.')
+        messages.add_message(request, messages.INFO,
+                             'Your booking has been cancelled.')
         username = booking.use.user.username
         return HttpResponseRedirect("/people/%s" % username)
 
@@ -464,7 +478,7 @@ def BookingCancel(request, booking_id, location_slug):
     booking = Booking.objects.get(id=booking_id)
     if (
         not (
-            request.user.is_authenticated() and
+            request.user.is_authenticated and
             request.user == booking.use.user
         ) and
         request.user not in location.house_admins.all()
@@ -474,6 +488,7 @@ def BookingCancel(request, booking_id, location_slug):
     redirect = request.POST.get("redirect")
 
     booking.cancel()
-    messages.add_message(request, messages.INFO, 'The booking has been cancelled.')
+    messages.add_message(request, messages.INFO,
+                         'The booking has been cancelled.')
     username = booking.use.user.username
     return HttpResponseRedirect(redirect)

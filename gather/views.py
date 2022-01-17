@@ -1,4 +1,7 @@
-import json, requests, logging, datetime
+import json
+import requests
+import logging
+import datetime
 from PIL import Image
 
 from django.contrib.auth.models import User, Group
@@ -26,19 +29,23 @@ from modernomad.core.models import Location
 
 logger = logging.getLogger(__name__)
 
+
 def create_event(request, location_slug=None):
     location = get_object_or_404(Location, slug=location_slug)
     current_user = request.user
-    logger.debug("create_event: location:%s, user:%s" % (location, current_user))
+    logger.debug("create_event: location:%s, user:%s" %
+                 (location, current_user))
 
     # if the user doesn't have a proper profile, then make sure they extend it first
     logger.debug(current_user.id)
-    if current_user.id == None :
-        messages.add_message(request, messages.INFO, 'We want to know who you are! Please create a profile before submitting an event.')
+    if current_user.id == None:
+        messages.add_message(
+            request, messages.INFO, 'We want to know who you are! Please create a profile before submitting an event.')
         next_url = '/locations/%s/events/create/' % location.slug
         return HttpResponseRedirect('/people/register/?next=%s' % next_url)
     elif current_user.is_authenticated and ((not current_user.profile.bio) or (not current_user.profile.image)):
-        messages.add_message(request, messages.INFO, 'We want to know a bit more about you! Please complete your profile before submitting an event.')
+        messages.add_message(
+            request, messages.INFO, 'We want to know a bit more about you! Please complete your profile before submitting an event.')
         return HttpResponseRedirect('/people/%s/edit/' % current_user.username)
 
     other_users = User.objects.exclude(id=current_user.id)
@@ -71,7 +78,8 @@ def create_event(request, location_slug=None):
 
             new_event_notification(event, location)
 
-            messages.add_message(request, messages.INFO, 'The event has been created.')
+            messages.add_message(request, messages.INFO,
+                                 'The event has been created.')
             return HttpResponseRedirect(reverse('gather_view_event', args=(event.location.slug, event.id, event.slug)))
         else:
             logger.debug("form error")
@@ -82,6 +90,7 @@ def create_event(request, location_slug=None):
         form = EventForm()
     return render(request, 'gather_event_create.html', {'form': form, 'current_user': current_user, 'user_list': json.dumps(user_list), 'is_event_admin': is_event_admin, 'location': location})
 
+
 @login_required
 def edit_event(request, event_id, event_slug, location_slug=None):
     location = get_object_or_404(Location, slug=location_slug)
@@ -89,7 +98,7 @@ def edit_event(request, event_id, event_slug, location_slug=None):
     other_users = User.objects.exclude(id=current_user.id)
     user_list = [u.username for u in other_users]
     event = Event.objects.get(id=event_id)
-    if not (request.user.is_authenticated() and (request.user in event.organizers.all() or request.user in event.location.house_admins.all())):
+    if not (request.user.is_authenticated and (request.user in event.organizers.all() or request.user in event.location.house_admins.all())):
         return HttpResponseRedirect("/")
 
     if request.method == 'POST':
@@ -100,7 +109,8 @@ def edit_event(request, event_id, event_slug, location_slug=None):
             logger.debug(co_organizers)
             event.organizers.add(*co_organizers)
             event.save()
-            messages.add_message(request, messages.INFO, 'The event has been saved.')
+            messages.add_message(request, messages.INFO,
+                                 'The event has been saved.')
             return HttpResponseRedirect(reverse('gather_view_event', args=(event.location.slug, event.id, event.slug)))
         else:
             logger.debug("form error")
@@ -112,8 +122,10 @@ def edit_event(request, event_id, event_slug, location_slug=None):
         other_organizer_usernames = [u.username for u in other_organizers]
         other_organizer_usernames_string = ",".join(other_organizer_usernames)
         logger.debug(event.organizers.all())
-        form = EventForm(instance=event, initial={'co_organizers': other_organizer_usernames_string})
+        form = EventForm(instance=event, initial={
+                         'co_organizers': other_organizer_usernames_string})
     return render(request, 'gather_event_edit.html', {'form': form, 'current_user': current_user, 'event_id': event_id, 'event_slug': event_slug, 'user_list': json.dumps(user_list), 'location': location})
+
 
 def view_event(request, event_id, event_slug, location_slug=None):
     # XXX should we double check the associated location here? currently the
@@ -144,7 +156,7 @@ def view_event(request, event_id, event_slug, location_slug=None):
         past = False
 
     # set up for those without accounts to RSVP
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         current_user = request.user
         new_user_form = None
         login_form = None
@@ -172,42 +184,50 @@ def view_event(request, event_id, event_slug, location_slug=None):
         num_attendees = len(event.attendees.all())
         # only meaningful if event.limit > 0
         spots_remaining = event.limit - num_attendees
-        event_email = 'event%d@%s.%s' % (event.id, event.location.slug, settings.LIST_DOMAIN)
+        event_email = 'event%d@%s.%s' % (event.id,
+                                         event.location.slug, settings.LIST_DOMAIN)
         domain = Site.objects.get_current().domain
-        formatted_title = event.title.replace(" ","+")
-        formatted_dates =  event.start.strftime("%Y%m%dT%H%M00Z") + "/" + event.end.strftime("%Y%m%dT%H%M00Z") # "20140127T224000Z/20140320T221500Z"
-        detail_url = "https://" +domain +  reverse('gather_view_event', args=(event.location.slug, event.id, event.slug))
-        formatted_location = event.where.replace(" ","+")
-        event_google_cal_link = '''https://www.google.com/calendar/render?action=TEMPLATE&text=%s&dates=%s&details=For+details%%3a+%s&location=%s&sf=true&output=xml''' % (formatted_title, formatted_dates, detail_url, formatted_location)
+        formatted_title = event.title.replace(" ", "+")
+        formatted_dates = event.start.strftime("%Y%m%dT%H%M00Z") + "/" + event.end.strftime(
+            "%Y%m%dT%H%M00Z")  # "20140127T224000Z/20140320T221500Z"
+        detail_url = "https://" + domain + \
+            reverse('gather_view_event', args=(
+                event.location.slug, event.id, event.slug))
+        formatted_location = event.where.replace(" ", "+")
+        event_google_cal_link = '''https://www.google.com/calendar/render?action=TEMPLATE&text=%s&dates=%s&details=For+details%%3a+%s&location=%s&sf=true&output=xml''' % (
+            formatted_title, formatted_dates, detail_url, formatted_location)
         if user_is_event_admin or user_is_organizer:
             email_form = EventEmailTemplateForm(event, location)
         else:
             email_form = None
         return render(request, 'gather_event_view.html', {'event': event, 'current_user': current_user, 'event_google_cal_link': event_google_cal_link,
-            'user_is_organizer': user_is_organizer, 'new_user_form': new_user_form, "event_email": event_email, "domain": domain,
-            'login_form': login_form, "spots_remaining": spots_remaining, 'user_is_event_admin': user_is_event_admin, 'email_form': email_form,
-            "num_attendees": num_attendees, 'in_the_past': past, 'endorsements': event.endorsements.all(), 'location': location})
+                                                          'user_is_organizer': user_is_organizer, 'new_user_form': new_user_form, "event_email": event_email, "domain": domain,
+                                                          'login_form': login_form, "spots_remaining": spots_remaining, 'user_is_event_admin': user_is_event_admin, 'email_form': email_form,
+                                                          "num_attendees": num_attendees, 'in_the_past': past, 'endorsements': event.endorsements.all(), 'location': location})
 
     elif not current_user:
         # if the user is not logged in and this is not a public event, have them login and try again
-        messages.add_message(request, messages.INFO, 'Please log in to view this event.')
-        next_url = reverse('gather_view_event', args=(event.location.slug, event.id, event.slug))
+        messages.add_message(request, messages.INFO,
+                             'Please log in to view this event.')
+        next_url = reverse('gather_view_event', args=(
+            event.location.slug, event.id, event.slug))
         return HttpResponseRedirect('/people/login/?next=%s' % next_url)
     else:
         # the user is logged in but the event is not viewable to them based on their status
-        messages.add_message(request, messages.INFO, 'Oops! You do not have permission to view this event.')
+        messages.add_message(
+            request, messages.INFO, 'Oops! You do not have permission to view this event.')
         return HttpResponseRedirect('/locations/%s' % location.slug)
 
 
 def upcoming_events_all_locations(request):
     ''' if a site supports multiple locations this page can be used to show
     events across all locations.'''
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         current_user = request.user
     else:
         current_user = None
     today = datetime.datetime.today()
-    all_upcoming = Event.objects.upcoming(current_user = request.user)
+    all_upcoming = Event.objects.upcoming(current_user=request.user)
     culled_upcoming = []
     for event in all_upcoming:
         if event.is_viewable(current_user):
@@ -228,17 +248,17 @@ def upcoming_events_all_locations(request):
     return render(request, 'gather_events_list.html', {"events": events, 'current_user': current_user, 'page_title': 'Upcoming Events'})
 
 
-
 def upcoming_events(request, location_slug=None):
     ''' upcoming events limited to a specific location (either the one
     specified or the default single location).'''
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         current_user = request.user
     else:
         current_user = None
     today = datetime.datetime.today()
     location = get_object_or_404(Location, slug=location_slug)
-    all_upcoming = Event.objects.upcoming(current_user = request.user, location=location)
+    all_upcoming = Event.objects.upcoming(
+        current_user=request.user, location=location)
     culled_upcoming = []
     for event in all_upcoming:
         if event.is_viewable(current_user):
@@ -262,10 +282,14 @@ def upcoming_events(request, location_slug=None):
 def user_events(request, username):
     user = User.objects.get(username=username)
     today = timezone.now()
-    events_organized_upcoming = user.events_organized.all().filter(end__gte = today).order_by('start')
-    events_attended_upcoming = user.events_attending.all().filter(end__gte = today).order_by('start')
-    events_organized_past = user.events_organized.all().filter(end__lt = today).order_by('-start')
-    events_attended_past = user.events_attending.all().filter(end__lt = today).order_by('-start')
+    events_organized_upcoming = user.events_organized.all().filter(
+        end__gte=today).order_by('start')
+    events_attended_upcoming = user.events_attending.all().filter(
+        end__gte=today).order_by('start')
+    events_organized_past = user.events_organized.all().filter(
+        end__lt=today).order_by('-start')
+    events_attended_past = user.events_attending.all().filter(
+        end__lt=today).order_by('-start')
     return render(request, 'gather_user_events_list.html', {
         'events_organized_upcoming': events_organized_upcoming,
         'events_attended_upcoming': events_attended_upcoming,
@@ -280,24 +304,28 @@ def needs_review(request, location_slug=None):
     location = get_object_or_404(Location, slug=location_slug)
     # if user is not an event admin at this location, redirect
     location_admin_group = EventAdminGroup.objects.get(location=location)
-    if not request.user.is_authenticated() or (request.user not in location_admin_group.users.all()):
+    if not request.user.is_authenticated or (request.user not in location_admin_group.users.all()):
         return HttpResponseRedirect('/')
 
     # upcoming events that are not yet live
     today = timezone.now()
-    events_pending = Event.objects.filter(status=Event.PENDING).filter(end__gte = today).filter(location=location)
-    events_under_discussion = Event.objects.filter(status=Event.FEEDBACK).filter(end__gte = today).filter(location=location)
-    return render(request, 'gather_events_admin_needing_review.html', {'events_pending': events_pending, 'events_under_discussion': events_under_discussion, 'location': location })
+    events_pending = Event.objects.filter(status=Event.PENDING).filter(
+        end__gte=today).filter(location=location)
+    events_under_discussion = Event.objects.filter(
+        status=Event.FEEDBACK).filter(end__gte=today).filter(location=location)
+    return render(request, 'gather_events_admin_needing_review.html', {'events_pending': events_pending, 'events_under_discussion': events_under_discussion, 'location': location})
+
 
 def past_events(request, location_slug=None):
     location = get_object_or_404(Location, slug=location_slug)
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         current_user = request.user
     else:
         current_user = None
     today = datetime.datetime.today()
     # most recent first
-    all_past = Event.objects.filter(start__lt = today).order_by('-start').filter(location=location)
+    all_past = Event.objects.filter(start__lt=today).order_by(
+        '-start').filter(location=location)
     culled_past = []
     for event in all_past:
         if event.is_viewable(current_user):
@@ -345,7 +373,8 @@ def email_preferences(request, username, location_slug=None):
 
     notifications.save()
     logger.debug(notifications.location_weekly.all())
-    messages.add_message(request, messages.INFO, 'Your preferences have been updated.')
+    messages.add_message(request, messages.INFO,
+                         'Your preferences have been updated.')
     return HttpResponseRedirect('/people/%s/' % u.username)
 
 
@@ -355,7 +384,7 @@ def event_approve(request, event_id, event_slug, location_slug=None):
     if request.user not in location_event_admin.users.all():
         return HttpResponseRedirect('/404')
     event = Event.objects.get(id=event_id)
-    if not (request.user.is_authenticated() and (request.user in event.organizers.all() or request.user in event.location.house_admins.all())):
+    if not (request.user.is_authenticated and (request.user in event.organizers.all() or request.user in event.location.house_admins.all())):
         return HttpResponseRedirect("/")
 
     event.status = Event.READY
@@ -377,6 +406,7 @@ def event_approve(request, event_id, event_slug, location_slug=None):
 
     return HttpResponseRedirect(reverse('gather_view_event', args=(location.slug, event.id, event.slug)))
 
+
 @login_required
 def event_publish(request, event_id, event_slug, location_slug=None):
     location = get_object_or_404(Location, slug=location_slug)
@@ -385,7 +415,7 @@ def event_publish(request, event_id, event_slug, location_slug=None):
     event = Event.objects.get(id=event_id)
     if (request.user not in location_event_admin.users.all() and
         request.user not in event.location.house_admins.all() and
-        request.user not in event.organizers.all()):
+            request.user not in event.organizers.all()):
         logger.debug('user does not have correct permissions to publish event')
         return HttpResponseRedirect('/404')
 
@@ -415,7 +445,7 @@ def event_cancel(request, event_id, event_slug, location_slug=None):
     if request.user not in location_event_admin.users.all():
         return HttpResponseRedirect('/404')
     event = Event.objects.get(id=event_id)
-    if not (request.user.is_authenticated() and (request.user in event.organizers.all() or request.user in event.location.house_admins.all())):
+    if not (request.user.is_authenticated and (request.user in event.organizers.all() or request.user in event.location.house_admins.all())):
         return HttpResponseRedirect("/")
 
     event.status = Event.CANCELED
@@ -433,23 +463,24 @@ def event_cancel(request, event_id, event_slug, location_slug=None):
 
     return HttpResponseRedirect(reverse('gather_view_event', args=(location.slug, event.id, event.slug)))
 
+
 def event_send_mail(request, event_id, event_slug, location_slug=None):
     if not request.method == 'POST':
         return HttpResponseRedirect('/404')
 
     location = get_object_or_404(Location, slug=location_slug)
     subject = request.POST.get("subject")
-    recipients = [request.POST.get("recipient"),]
+    recipients = [request.POST.get("recipient"), ]
     body = request.POST.get("body") + "\n\n" + request.POST.get("footer")
 
     # the from address is set to the organizer's email so people can respond
     # directly with questions if needed.
-    mailgun_data={"from": request.user.email,
-        "to": request.user.email,
-        "bcc": recipients,
-        "subject": subject,
-        "text": body,
-    }
+    mailgun_data = {"from": request.user.email,
+                    "to": request.user.email,
+                    "bcc": recipients,
+                    "subject": subject,
+                    "text": body,
+                    }
 
     resp = mailgun_send(mailgun_data)
 
@@ -457,7 +488,8 @@ def event_send_mail(request, event_id, event_slug, location_slug=None):
     if resp.status_code == 200:
         messages.add_message(request, messages.INFO, "Your message was sent.")
     else:
-        messages.add_message(request, messages.INFO, "There was a connection problem and your message was not sent.")
+        messages.add_message(
+            request, messages.INFO, "There was a connection problem and your message was not sent.")
     return HttpResponseRedirect(reverse('gather_view_event', args=(location_slug, event_id, event_slug)))
 
 
@@ -483,11 +515,12 @@ def rsvp_event(request, event_id, event_slug, location_slug=None):
         event.save()
         num_attendees = event.attendees.count()
         spots_remaining = event.limit - num_attendees
-        return render(request, "snippets/rsvp_info.html", {"num_attendees": num_attendees, "spots_remaining": spots_remaining, "event": event, 'current_user': user, 'user_is_organizer': user_is_organizer, 'location': location });
+        return render(request, "snippets/rsvp_info.html", {"num_attendees": num_attendees, "spots_remaining": spots_remaining, "event": event, 'current_user': user, 'user_is_organizer': user_is_organizer, 'location': location})
 
     else:
         logger.debug('user was aready attending')
-    return HttpResponse(status=500);
+    return HttpResponse(status=500)
+
 
 @login_required
 def rsvp_cancel(request, event_id, event_slug, location_slug=None):
@@ -510,10 +543,11 @@ def rsvp_cancel(request, event_id, event_slug, location_slug=None):
         event.save()
         num_attendees = event.attendees.count()
         spots_remaining = event.limit - num_attendees
-        return render(request, "snippets/rsvp_info.html", {"num_attendees": num_attendees, "spots_remaining": spots_remaining, "event": event, 'current_user': user, 'user_is_organizer': user_is_organizer, 'location': location });
+        return render(request, "snippets/rsvp_info.html", {"num_attendees": num_attendees, "spots_remaining": spots_remaining, "event": event, 'current_user': user, 'user_is_organizer': user_is_organizer, 'location': location})
 
     logger.debug('user was not attending')
-    return HttpResponse(status=500);
+    return HttpResponse(status=500)
+
 
 def rsvp_new_user(request, event_id, event_slug, location_slug=None):
     location = get_object_or_404(Location, slug=location_slug)
@@ -568,13 +602,15 @@ def rsvp_new_user(request, event_id, event_slug, location_slug=None):
         event.attendees.add(new_user)
         logger.debug(event.attendees.all())
         event.save()
-        messages.add_message(request, messages.INFO, 'Thanks! Your account has been created. Check your email for login info and how to update your preferences.')
+        messages.add_message(
+            request, messages.INFO, 'Thanks! Your account has been created. Check your email for login info and how to update your preferences.')
         return HttpResponse(status=200)
     else:
         errors = json.dumps({"errors": form.errors})
         return HttpResponse(json.dumps(errors))
 
     return HttpResponse(status=500)
+
 
 def endorse(request, event_id, event_slug, location_slug=None):
     location = get_object_or_404(Location, slug=location_slug)
@@ -588,4 +624,4 @@ def endorse(request, event_id, event_slug, location_slug=None):
     event.endorsements.add(endorser)
     event.save()
     endorsements = event.endorsements.all()
-    return render(request, "snippets/endorsements.html", {"endorsements": endorsements, "current_user": request.user, 'location': location, 'event': event});
+    return render(request, "snippets/endorsements.html", {"endorsements": endorsements, "current_user": request.user, 'location': location, 'event': event})

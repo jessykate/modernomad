@@ -6,6 +6,7 @@ from django.contrib.auth.models import Group
 
 register = template.Library()
 
+
 @register.filter(name='split')
 @stringfilter
 def split(value, arg):
@@ -32,6 +33,8 @@ def subsets_size(value, set_size):
             break
 
 # from http://djangosnippets.org/snippets/1576/
+
+
 @register.tag()
 def ifusergroup(parser, token):
     """ Check to see if the currently logged in user belongs to a specific
@@ -45,7 +48,8 @@ def ifusergroup(parser, token):
     try:
         tag, group = token.split_contents()
     except ValueError:
-        raise template.TemplateSyntaxError("Tag 'ifusergroup' requires 1 argument.")
+        raise template.TemplateSyntaxError(
+            "Tag 'ifusergroup' requires 1 argument.")
 
     nodelist_true = parser.parse(('else', 'endifusergroup'))
     token = parser.next_token()
@@ -68,7 +72,7 @@ class GroupCheckNode(template.Node):
     def render(self, context):
         user = template.Variable('user').resolve(context)
 
-        if user is None or not user.is_authenticated():
+        if user is None or not user.is_authenticated:
             return self.nodelist_false.render(context)
 
         try:
@@ -79,4 +83,3 @@ class GroupCheckNode(template.Node):
         except Group.DoesNotExist:
             return self.nodelist_false.render(context)
         return self.nodelist_false.render(context)
-

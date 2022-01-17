@@ -56,13 +56,13 @@ class Query(ObjectType):
     my_current_occupancies = DjangoFilterConnectionField(OccupantNode)
 
     def resolve_my_occupancies(self, info):
-        if not info.context.user.is_authenticated():
+        if not info.context.user.is_authenticated:
             return Use.objects.none()
         else:
             return Use.objects.filter(user=info.context.user)
 
     def resolve_my_current_occupancies(self, info):
-        if not info.context.user.is_authenticated():
+        if not info.context.user.is_authenticated:
             return Use.objects.none()
         else:
             today = timezone.now()
