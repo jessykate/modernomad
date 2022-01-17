@@ -103,9 +103,13 @@ export default class RoomDrftIndex extends React.Component {
         <div className="room-card-container">
           <div className="container">
             <div className="row availability-table-toggle">
-              <Nav bsStyle="pills" className="pull-right" activeKey={this.state.activeKey} onSelect={this.handleSelect.bind(this)}>
-                <NavItem eventKey={1} title="Room Grid"><i className="fa fa-th"></i></NavItem>
-                <NavItem eventKey={2} title="Availability Matrix"><i className="fa fa-list"></i></NavItem>
+              <Nav variant="pills" className="pull-right" activeKey={this.state.activeKey} onSelect={this.handleSelect.bind(this)}>
+                <NavItem title="Room Grid">
+                  <NavLink eventKey={1}><i className="fa fa-th"></i></NavLink>
+                </NavItem>
+                <NavItem title="Availability Matrix">
+                  <NavLink eventKey={2}><i className="fa fa-list"></i></NavLink>
+                </NavItem>
               </Nav>
             </div>
             {
