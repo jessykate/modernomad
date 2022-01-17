@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import RoomCard from './RoomCard'
 import DateRangeSelector from './DateRangeSelector'
 import AvailabilityMatrix from './AvailabilityMatrix'
 import { Nav, NavItem, NavLink } from 'react-bootstrap';
 import { isFullyAvailable } from '../../models/Availabilities'
+import RoomCards from './RoomCards'
 
 export default class RoomIndex extends React.Component {
   static propTypes = {
