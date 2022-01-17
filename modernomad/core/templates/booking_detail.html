@@ -217,7 +217,7 @@
       </div>
 
 
-  {% ifequal booking.use.user user %}
+  {% if booking.use.user == user %}
       <div class="res-modify-btn row-spacer">
           {% if past %}
               <p class="notice">This booking is in the past and cannot be modified</p>
@@ -243,7 +243,7 @@
           <span class="pull-right"><em>Created {{booking.created}}. Last updated {{booking.updated}}.</em></span>
       </div>
 
-  {% endifequal %}
+  {% endif %}
 
   </div> <!-- end col -->
 
