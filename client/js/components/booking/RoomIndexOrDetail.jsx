@@ -44,7 +44,7 @@ function RoomIndexOrDetailWithoutQuery() {
   useEffect(() => {
     // Rooms need to be fetched if the page didn't start out with any rooms
     // which happens when going from individual room to list view.
-    if (!rooms) fetchRooms(null);
+    if (rooms.length === 0) fetchRooms(null);
   }, []);
 
   return (
