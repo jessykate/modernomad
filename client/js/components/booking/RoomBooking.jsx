@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { BrowserRouter, Route } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import RoomIndexOrDetail from './RoomIndexOrDetail'
 import RoomDrft from './RoomDrft'
 import RoomDetail from './RoomDetail'
@@ -19,31 +19,33 @@ class RoomBookingRoutes extends React.Component {
     return (
       <BrowserRouter>
         <div>
-          <Route
-            path="/drft/"
-            component={RoomDrft}
-            drftBalance={this.props.drftBalance}
-            isAdmin={this.props.isAdmin}
-          />
-          <Route
-            exact path="/locations/:location/stay/"
-            render={(props) => {
-              return <RoomIndexOrDetail
-                {...props}
-                rooms={this.props.rooms}
-                isAdmin={this.props.isAdmin}
-              />
-            }}
-          />
-          <Route
-            path="/locations/:location/stay/room/:id"
-            render={(props) => <RoomDetail
-              {...props}
-              room={this.props.room}
-              fees={this.props.fees}
+          <Routes>
+            <Route
+              path="/drft/"
+              component={RoomDrft}
               drftBalance={this.props.drftBalance}
-            />}
-          />
+              isAdmin={this.props.isAdmin}
+            />
+            <Route
+              exact path="/locations/:location/stay/"
+              render={(props) => {
+                return <RoomIndexOrDetail
+                  {...props}
+                  rooms={this.props.rooms}
+                  isAdmin={this.props.isAdmin}
+                />
+              }}
+            />
+            <Route
+              path="/locations/:location/stay/room/:id"
+              render={(props) => <RoomDetail
+                {...props}
+                room={this.props.room}
+                fees={this.props.fees}
+                drftBalance={this.props.drftBalance}
+              />}
+            />
+          </Routes>
         </div>
       </BrowserRouter>
     )
