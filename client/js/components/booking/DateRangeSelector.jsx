@@ -107,7 +107,7 @@ export default class DateRangeSelector extends React.Component {
   }
 
   minDepart(currentArrive) {
-    const bestArrive = currentArrive || this.state.arrive || moment()
+    const bestArrive = moment(currentArrive || this.state.arrive)
     return bestArrive.clone().add(1, 'days')
   }
 
