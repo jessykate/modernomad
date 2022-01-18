@@ -6,6 +6,7 @@ import _ from "lodash";
 import makeParam from "../generic/Utils";
 import { DATEFORMAT } from "./constants";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import moment from 'moment'
 
 function RoomIndexOrDetailWithoutQuery() {
   const [rooms, setRooms] = useState([]);
@@ -26,9 +27,10 @@ function RoomIndexOrDetailWithoutQuery() {
   };
 
   const reFilter = (filters) => {
+    console.log('refiltering!', filters)
     const formattedDates = {
-      arrive: filters.dates.arrive.format(DATEFORMAT),
-      depart: filters.dates.depart.format(DATEFORMAT),
+      arrive: moment(filters.dates.arrive).format(DATEFORMAT),
+      depart: moment(filters.dates.depart).format(DATEFORMAT),
     };
     var path = `/locations/${location_name}/stay/`;
     fetchRooms(formattedDates);
