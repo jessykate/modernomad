@@ -116,7 +116,7 @@ export default class DateRangeSelector extends React.Component {
   maxDepart(currentArrive, maxLength) {
     if (!maxLength) return null
 
-    const bestArrive = currentArrive || this.state.arrive || moment()
+    const bestArrive = moment(currentArrive || this.state.arrive)
     return bestArrive.clone().add(maxLength, 'days')
   }
 

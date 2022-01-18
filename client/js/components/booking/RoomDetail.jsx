@@ -17,7 +17,7 @@ function RoomDetail({ room: baseRoom, drftBalance, fees }) {
   const [isLoading, setIsLoading] = useState(false);
   const { id, location: locationName } = useParams();
   const search = useLocation().search.slice(1);
-  const query = qs.parse(search);
+  let query = qs.parse(search);
   const navigate = useNavigate();
 
   const fetchRoom = (filters) => {
@@ -29,7 +29,7 @@ function RoomDetail({ room: baseRoom, drftBalance, fees }) {
       formattedDates["depart"] = moment(filters.dates.depart).format(
         DATEFORMAT
       );
-      this.query = formattedDates;
+      query = formattedDates;
     }
 
     const path = `/locations/${locationName}/stay/room/${id}`;

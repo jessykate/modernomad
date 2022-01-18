@@ -135,7 +135,7 @@ export default class BookingForm extends React.Component {
                 <FormGroup validationState={this.validationState()} controlId="formControlsTextarea">
                   <p>*Tell us a little about the purpose of your trip</p>
                   {this.validationState() == 'error' && <FormLabel>You must write a purpose for your stay</FormLabel>}
-                  <FormControl componentClass="textarea" name="purpose" onChange={this.changePurpose.bind(this)} />
+                  <FormControl type="textarea" name="purpose" onChange={this.changePurpose.bind(this)} />
                 </FormGroup>
 
                 <p>
