@@ -32,10 +32,10 @@ function RoomIndexOrDetailWithoutQuery() {
       arrive: moment(filters.dates.arrive).format(DATEFORMAT),
       depart: moment(filters.dates.depart).format(DATEFORMAT),
     };
-    var path = `/locations/${location_name}/stay/`;
+    const path = `/locations/${location_name}/stay/`;
     fetchRooms(formattedDates);
 
-    let location = {
+    const location = {
       pathname: path,
       search: `?${makeParam(formattedDates)}`,
     };
