@@ -126,15 +126,15 @@ export default class BookingForm extends React.Component {
           />
         </div>
         {this.props.datesAvailable || !this.props.query.arrive ?
-          <div>
-            {this.props.datesAvailable ?
-              <div>
+          <>
+            {this.props.datesAvailable &&
+              <>
                 {this.renderCost()}
 
                 <FormGroup controlId="formControlsTextarea">
                   <FormLabel>*Tell us a little about the purpose of your trip</FormLabel>
                   {this.validationState() === 'error' && <Feedback type="invalid">You must write a purpose for your stay</Feedback>}
-                  <FormControl type="textarea" name="purpose" onChange={this.changePurpose.bind(this)} required on/>
+                  <FormControl type="textarea" name="purpose" onChange={this.changePurpose.bind(this)} required />
                 </FormGroup>
                 <p>
                   <a className="btn-link" onClick={this.handlePanel.bind(this)}>
@@ -147,18 +147,15 @@ export default class BookingForm extends React.Component {
                   <p>Comments</p>
                   <textarea className="form-control" name="comments" />
                 </div>
-              </div>
-              :
-              <div></div>
+              </>
             }
             <button className="btn btn-primary btn-block btn-brand" id="submit-booking-request">Request to Book</button>
-
-          </div>
+          </>
           :
-          <div>
+          <>
             <p className="text-center">Those dates are not available</p>
             <Link className="btn btn-default btn-block" to={this.indexLinkDetails()}>View other rooms</Link>
-          </div>
+          </>
         }
       </form>
     )

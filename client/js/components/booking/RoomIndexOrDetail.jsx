@@ -27,7 +27,6 @@ function RoomIndexOrDetailWithoutQuery() {
   };
 
   const reFilter = (filters) => {
-    console.log('refiltering!', filters)
     const formattedDates = {
       arrive: moment(filters.dates.arrive).format(DATEFORMAT),
       depart: moment(filters.dates.depart).format(DATEFORMAT),
