@@ -141,7 +141,7 @@ export default class BookingForm extends React.Component {
                     <span className={(this.state.open ? "fa fa-chevron-down" : "fa fa-chevron-right")}></span> Optional fields
                   </a>
                 </p>
-                <div className={`optional-fields${this.state.open ? ' open' : ''}`}>
+                <div className={`optional-fields${this.state.open ? '' : ' closed'}`}>
                   <p>Arrival time</p>
                   <input className="form-control" name="arrival_time" />
                   <p>Comments</p>
