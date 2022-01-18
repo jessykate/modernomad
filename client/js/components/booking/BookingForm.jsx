@@ -2,14 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import DateRangeSelector from './DateRangeSelector'
-import ImageCarousel from './ImageCarousel'
 import { Link } from 'react-router-dom'
 import { Accordion, FormGroup, FormLabel, FormControl, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import Feedback from 'react-bootstrap/Feedback'
 
 import DjangoCSRFInput from '../generic/DjangoCSRFInput'
 import BookingDisplay from './BookingDisplay'
 import { Booking } from '../../models/Booking'
-import makeParam from '../generic/Utils'
 import { DATEFORMAT } from './constants'
 
 
@@ -132,23 +131,22 @@ export default class BookingForm extends React.Component {
               <div>
                 {this.renderCost()}
 
-                <FormGroup validationState={this.validationState()} controlId="formControlsTextarea">
-                  <p>*Tell us a little about the purpose of your trip</p>
-                  {this.validationState() == 'error' && <FormLabel>You must write a purpose for your stay</FormLabel>}
-                  <FormControl type="textarea" name="purpose" onChange={this.changePurpose.bind(this)} />
+                <FormGroup controlId="formControlsTextarea">
+                  <FormLabel>*Tell us a little about the purpose of your trip</FormLabel>
+                  {this.validationState() === 'error' && <Feedback type="invalid">You must write a purpose for your stay</Feedback>}
+                  <FormControl type="textarea" name="purpose" onChange={this.changePurpose.bind(this)} required on/>
                 </FormGroup>
-
                 <p>
                   <a className="btn-link" onClick={this.handlePanel.bind(this)}>
                     <span className={(this.state.open ? "fa fa-chevron-down" : "fa fa-chevron-right")}></span> Optional fields
                   </a>
                 </p>
-                <Accordion collapsible expanded={this.state.open} className="optional-fields">
+                <div className={`optional-fields${this.state.open ? ' open' : ''}`}>
                   <p>Arrival time</p>
                   <input className="form-control" name="arrival_time" />
                   <p>Comments</p>
                   <textarea className="form-control" name="comments" />
-                </Accordion>
+                </div>
               </div>
               :
               <div></div>
