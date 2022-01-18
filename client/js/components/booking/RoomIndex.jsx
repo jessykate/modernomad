@@ -6,6 +6,8 @@ import { Nav, NavItem, NavLink } from 'react-bootstrap';
 import { isFullyAvailable } from '../../models/Availabilities'
 import RoomCards from './RoomCards'
 
+import "../styles/booking/RoomIndex.css"
+
 export default class RoomIndex extends React.Component {
   static propTypes = {
     rooms: PropTypes.array.isRequired,

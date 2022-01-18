@@ -3467,7 +3467,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   display: flex;
 }
 
-.nav > .nav-item > a {
+.nav > li > a {
   position: relative;
   display: block;
   padding: 10px 15px;
