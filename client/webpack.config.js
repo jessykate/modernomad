@@ -36,6 +36,8 @@ const devConfig = {
         "X-Requested-With, content-type, Authorization",
     },
   },
+
+  devtool: "inline-source-map",
 };
 
 module.exports = merge(commonConfig, devConfig);
