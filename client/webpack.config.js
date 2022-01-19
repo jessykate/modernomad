@@ -7,11 +7,6 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const commonConfig = require("./webpack.base.config.js");
 
 const devConfig = {
-  entry: [
-    "webpack-dev-server/client?http://localhost:3000",
-    "webpack/hot/only-dev-server",
-  ],
-
   output: {
     path: path.resolve("./build/"),
     publicPath: "http://localhost:3000/build/", // Tell django to use this URL to load packages and not use STATIC_URL + bundle_name
@@ -37,8 +32,12 @@ const devConfig = {
       "Access-Control-Allow-Headers":
         "X-Requested-With, content-type, Authorization",
     },
-    hot: false,
-    client: false,
+    port: 3000,
+    client: {
+      webSocketURL: {
+        port: 3000,
+      },
+    },
   },
 
   devtool: "inline-source-map",

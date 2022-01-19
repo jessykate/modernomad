@@ -4,6 +4,8 @@ import App from './components/App'
 import CapacityContainer from './components/capacity/CapacityContainer'
 import RoomBooking from './components/booking/RoomBooking'
 
+if (module.hot) module.hot.accept()
+
 var topLevelComponents = {
   CapacityContainer : CapacityContainer,
   RoomBooking : RoomBooking
