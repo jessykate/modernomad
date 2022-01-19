@@ -2,6 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 const { merge } = require("webpack-merge");
 const BundleTracker = require("webpack-bundle-tracker");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const commonConfig = require("./webpack.base.config.js");
 
@@ -20,6 +21,7 @@ const devConfig = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(), // don't reload if there is an error
     new BundleTracker({ path: __dirname, filename: "./webpack-stats.json" }),
+    new HtmlWebpackPlugin(),
   ],
 
   resolve: {
@@ -35,6 +37,8 @@ const devConfig = {
       "Access-Control-Allow-Headers":
         "X-Requested-With, content-type, Authorization",
     },
+    hot: false,
+    client: false,
   },
 
   devtool: "inline-source-map",
