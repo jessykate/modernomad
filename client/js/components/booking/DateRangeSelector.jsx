@@ -38,7 +38,11 @@ export default class DateRangeSelector extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  /**
+   * Warning: componentWillReceiveProps has been renamed, and is not recommended for use.
+   * See https://reactjs.org/link/unsafe-component-lifecycles for details
+   */
+   UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.maxLength != nextProps.maxLength) {
       const currentDates = this.currentDates()
       const newDates = this.constrainDateRangeByStart(currentDates, nextProps.maxLength)
