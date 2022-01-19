@@ -11,5 +11,9 @@ psql postgres -c 'CREATE DATABASE modernomad;'  || true
 
 python manage.py migrate
 
+trap 'kill $BGPID; exit' INT
+
 python manage.py runserver &
-cd client && node_modules/.bin/webpack-dev-server --port 3000
+BGPID=$!
+
+cd client && node_modules/.bin/webpack-dev-server --port 3000 --mode=development
