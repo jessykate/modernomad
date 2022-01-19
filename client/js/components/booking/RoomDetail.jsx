@@ -60,41 +60,39 @@ function RoomDetail({ room: baseRoom, drftBalance, fees }) {
 
   return (
     <Loader loading={isLoading}>
-      {!isLoading ? (
-        <div className="container room-detail">
-          <Link
-            to={{
-              pathname: `/locations/${locationName}/stay/`,
-              search: `?${query}`,
-            }}
-          >
-            <i className="fa fa-chevron-left"></i> Back to Rooms
-          </Link>
-          <h1>{room.name}</h1>
-          <div className="row">
-            <div className="col-md-8">
-              <div className="room-image-panel">
-                <img className="room-image img-responsive" src={room.image} />
-                {/*room.img && <ImageCarousel img={room.img} />*/}
-              </div>
-              <p className="room-summary">{nl2br(room.description)}</p>
+      <div className="container room-detail">
+        <Link
+          to={{
+            pathname: `/locations/${locationName}/stay/`,
+            search: `?${query}`,
+          }}
+        >
+          <i className="fa fa-chevron-left"></i> Back to Rooms
+        </Link>
+        <h1>{room.name}</h1>
+        <div className="row">
+          <div className="col-md-8">
+            <div className="room-image-panel">
+              <img className="room-image img-responsive" src={room.image} />
+              {/*room.img && <ImageCarousel img={room.img} />*/}
             </div>
-            <div className="col-md-4">
-              <div className="panel">
-                <BookingForm
-                  fees={fees}
-                  room={room}
-                  datesAvailable={isRoomAvailable()}
-                  onFilterChange={fetchRoom}
-                  drftBalance={drftBalance}
-                  location_name={locationName}
-                  query={query}
-                />
-              </div>
+            <p className="room-summary">{nl2br(room.description)}</p>
+          </div>
+          <div className="col-md-4">
+            <div className="panel">
+              <BookingForm
+                fees={fees}
+                room={room}
+                datesAvailable={isRoomAvailable()}
+                onFilterChange={fetchRoom}
+                drftBalance={drftBalance}
+                location_name={locationName}
+                query={query}
+              />
             </div>
           </div>
         </div>
-      ) : null}
+      </div>
     </Loader>
   );
 }
