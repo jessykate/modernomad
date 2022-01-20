@@ -5,7 +5,7 @@ RUN apt-get update -qq && apt-get install -yq \
     curl \
     netcat
 
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash
+RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash
 RUN apt-get update -qq && apt-get install -yq nodejs npm
 
 # https://bitbucket.org/site/master/issues/16334/pipelines-failing-with-could-not-get-uid
