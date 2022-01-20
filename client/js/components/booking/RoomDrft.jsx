@@ -40,6 +40,7 @@ function RoomDrftIndexOrDetail({ children }) {
   const navigate = useNavigate();
   const search = useLocation().search.slice(1);
   const query = qs.parse(search);
+  const parseFormat = 'MM/DD/YYYY'
   const arrive = query.arrive
     ? moment(query.arrive, parseFormat)
     : moment().startOf("day");
@@ -77,10 +78,9 @@ function RoomDrftIndexOrDetail({ children }) {
       path = path + "room/" + id;
     }
 
-    navigate({
-      pathname: path,
-      query: `?${formattedDates}`,
-    });
+    path += `?${new URLSearchParams(formattedDates).toString()}`
+
+    navigate(path);
   };
 
   const renderSubComponent = () => {
