@@ -3,7 +3,8 @@ FROM python:3.6.8-slim
 RUN apt-get update -qq && apt-get install -yq \
     build-essential \
     curl \
-    netcat
+    netcat \
+    libpq-dev
 
 RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash
 RUN apt-get update -qq && apt-get install -yq nodejs npm
