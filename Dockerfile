@@ -7,7 +7,7 @@ RUN apt-get update -qq && apt-get install -yq \
     libpq-dev
 
 RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash
-RUN apt-get update -qq && apt-get install -yq nodejs npm
+RUN apt-get update -qq && apt-get install -yq nodejs
 
 # https://bitbucket.org/site/master/issues/16334/pipelines-failing-with-could-not-get-uid
 # https://github.com/npm/npm/issues/20861
