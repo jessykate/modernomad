@@ -38,6 +38,8 @@ const devConfig = {
         port: 3000,
       },
     },
+    // While reenabling HMR is in progress, this allows the page to at least refresh
+    hot: false,
   },
 
   devtool: "inline-source-map",
