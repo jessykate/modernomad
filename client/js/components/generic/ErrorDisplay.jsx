@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {flatMap} from 'lodash'
+import flatMap from 'lodash/flatMap'
 import humanize from 'humanize-string'
 
 export default class ErrorDisplay extends React.Component {
