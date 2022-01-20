@@ -1,5 +1,4 @@
 import React from "react";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 
 import config from "../../apollo.config";
@@ -9,10 +8,8 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-const App = (props) => (
-  <ApolloProvider client={client}>
-    <MuiThemeProvider>{props.children}</MuiThemeProvider>
-  </ApolloProvider>
+const App = ({ children }) => (
+  <ApolloProvider client={client}>{children}</ApolloProvider>
 );
 
 export default App;
