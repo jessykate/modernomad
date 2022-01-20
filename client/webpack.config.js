@@ -1,18 +1,14 @@
-var path = require("path");
-var webpack = require("webpack");
-var BundleTracker = require("webpack-bundle-tracker");
+const path = require("path");
+const webpack = require("webpack");
+const { merge } = require("webpack-merge");
+const BundleTracker = require("webpack-bundle-tracker");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-module.exports = {
-  context: __dirname,
-  entry: [
-    "webpack-dev-server/client?http://localhost:3000",
-    "webpack/hot/only-dev-server",
-    "./js/index",
-  ],
+const commonConfig = require("./webpack.base.config.js");
 
+const devConfig = {
   output: {
     path: path.resolve("./build/"),
-    filename: "[name]-[hash].js",
     publicPath: "http://localhost:3000/build/", // Tell django to use this URL to load packages and not use STATIC_URL + bundle_name
   },
 
@@ -20,31 +16,33 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(), // don't reload if there is an error
     new BundleTracker({ path: __dirname, filename: "./webpack-stats.json" }),
+    new HtmlWebpackPlugin(),
   ],
 
-  module: {
-    rules: [
-      {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
-        use: {
-          loader: "babel-loader",
-          options: {
-            presets: ["@babel/preset-env", "@babel/preset-react"],
-          },
-        },
-      }, // to transform JSX into JS
-      {
-        test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
-      },
-    ],
-  },
-
   resolve: {
-    extensions: ["", ".js", ".jsx"],
     fallback: {
       url: false,
     },
   },
+
+  devServer: {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+      "Access-Control-Allow-Headers":
+        "X-Requested-With, content-type, Authorization",
+    },
+    port: 3000,
+    client: {
+      webSocketURL: {
+        port: 3000,
+      },
+    },
+    // While reenabling HMR is in progress, this allows the page to at least refresh
+    hot: false,
+  },
+
+  devtool: "inline-source-map",
 };
+
+module.exports = merge(commonConfig, devConfig);

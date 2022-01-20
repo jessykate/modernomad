@@ -16,7 +16,6 @@ class DummyRoomDetail extends React.Component {
 
 class RoomBookingRoutes extends React.Component {
   render() {
-    console.log("this.props", this.props);
     return (
       <BrowserRouter>
         <Routes>

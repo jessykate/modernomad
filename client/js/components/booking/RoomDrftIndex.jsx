@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import DateRangeSelector from './DateRangeSelector'
 import AvailabilityMatrix from './AvailabilityMatrix'
-import { FormGroup, Checkbox, Button, Nav, NavItem } from 'react-bootstrap';
+import { Nav, NavItem, NavLink } from 'react-bootstrap';
 import { isFullyAvailable } from '../../models/Availabilities'
 import RoomCards from './RoomCards'
 
@@ -48,7 +48,7 @@ export default class RoomDrftIndex extends React.Component {
   }
 
   renderLocationRoomCards() {
-    return this.props.rooms.reverse().map((room) => {
+    return this.props.rooms.slice().reverse().map((room) => {
       if (room.node.resources.length) {
         return (
           <div key={room.node.name}>
