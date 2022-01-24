@@ -13,7 +13,7 @@ Django
 djangorestframework
 Faker
 freezegun
-graphene-django
+graphene-django==3.0.0b7
 graphene
 graphql-core
 graphql-relay

@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import qs from "qs";
 import RoomIndex from "./RoomIndex";
-import _ from "lodash";
 import makeParam from "../generic/Utils";
 import { DATEFORMAT } from "./constants";
 import { useLocation, useNavigate, useParams } from "react-router-dom";

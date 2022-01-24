@@ -3,7 +3,7 @@ import RoomDrftIndex from "./RoomDrftIndex";
 import RoomDetail from "./RoomDetail";
 import gql from "graphql-tag";
 import qs from "qs";
-import _ from "lodash";
+import find from "lodash/find";
 import moment from "moment";
 import Loader from "../generic/Loader";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -64,7 +64,7 @@ function RoomDrftIndexOrDetail({ children }) {
   };
 
   const oneResource = (id) => {
-    return _.find(allResources(), { rid: parseInt(id) });
+    return find(allResources(), { rid: parseInt(id) });
   };
 
   const reFilter = (filters) => {

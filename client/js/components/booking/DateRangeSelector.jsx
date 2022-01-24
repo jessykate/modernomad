@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
-import _ from 'lodash'
+import join from 'lodash/join'
 import { DATEFORMAT } from './constants'
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -125,7 +125,7 @@ export default class DateRangeSelector extends React.Component {
   }
 
   render() {
-    const controlClasses = _.join(["form-control", this.props.inputClass], ' ')
+    const controlClasses = join(["form-control", this.props.inputClass], ' ')
     return (
       <div className="row">
         <div className={(this.props.detail ? "col-sm-2" : "col-md-2 col-sm-4")}><h4 className={(this.props.detail ? "detail-size" : "index-size")}>Dates</h4></div>

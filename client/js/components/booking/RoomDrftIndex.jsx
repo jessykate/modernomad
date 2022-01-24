@@ -5,6 +5,7 @@ import AvailabilityMatrix from './AvailabilityMatrix'
 import { Nav, NavItem, NavLink } from 'react-bootstrap';
 import { isFullyAvailable } from '../../models/Availabilities'
 import RoomCards from './RoomCards'
+import filter from 'lodash/filter'
 
 export default class RoomDrftIndex extends React.Component {
   static propTypes = {
@@ -35,7 +36,7 @@ export default class RoomDrftIndex extends React.Component {
 
   displayableRooms(rooms) {
     if (this.hasDateQuery()) {
-      return _.filter(rooms, (room) => {
+      return filter(rooms, (room) => {
         return isFullyAvailable(room.availabilities)
       })
     } else {
