@@ -2,10 +2,9 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import qs from "qs";
 import RoomIndex from "./RoomIndex";
-import makeParam from "../generic/Utils";
 import { DATEFORMAT } from "./constants";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import moment from 'moment'
+import moment from "moment";
 
 function RoomIndexOrDetailWithoutQuery() {
   const [rooms, setRooms] = useState([]);
@@ -33,13 +32,14 @@ function RoomIndexOrDetailWithoutQuery() {
     const path = `/locations/${location_name}/stay/`;
     fetchRooms(formattedDates);
 
+    const stringifiedParams = qs.stringify(formattedDates);
     const location = {
       pathname: path,
-      search: `?${makeParam(formattedDates)}`,
+      search: stringifiedParams ? `?${stringifiedParams}` : "",
     };
 
     navigate(location);
-  }
+  };
 
   useEffect(() => {
     // Rooms need to be fetched if the page didn't start out with any rooms

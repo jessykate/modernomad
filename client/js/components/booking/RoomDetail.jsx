@@ -8,7 +8,6 @@ import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import isEmpty from "lodash/isEmpty";
 import nl2br from "react-nl2br";
 import { isFullyAvailable } from "../../models/Availabilities";
-import makeParam from "../generic/Utils";
 import { DATEFORMAT } from "./constants";
 import moment from "moment";
 
@@ -40,9 +39,10 @@ function RoomDetail({ room: baseRoom, drftBalance, fees }) {
         setIsLoading(false);
       });
 
+    const stringifiedParams = qs.stringify(formattedDates);
     const urlLocation = {
       pathname: path,
-      search: `?${makeParam(formattedDates)}`,
+      search: stringifiedParams ? `?${stringifiedParams}` : "",
     };
 
     navigate(urlLocation);
@@ -64,7 +64,7 @@ function RoomDetail({ room: baseRoom, drftBalance, fees }) {
         <Link
           to={{
             pathname: `/locations/${locationName}/stay/`,
-            search: `?${query}`,
+            search: qs.stringify(query) ? `?${query}` : "",
           }}
         >
           <i className="fa fa-chevron-left"></i> Back to Rooms
