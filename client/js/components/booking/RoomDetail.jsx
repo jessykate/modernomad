@@ -13,7 +13,8 @@ import moment from "moment";
 
 function RoomDetail({ room: baseRoom, drftBalance, fees }) {
   const [room, setRoom] = useState(baseRoom);
-  const [isLoading, setIsLoading] = useState(false);
+  const roomExists = !!roomExists;
+  const [isLoading, setIsLoading] = useState(!roomExists);
   const { id, location: locationName } = useParams();
   const search = useLocation().search.slice(1);
   let query = qs.parse(search);
@@ -34,10 +35,7 @@ function RoomDetail({ room: baseRoom, drftBalance, fees }) {
     const path = `/locations/${locationName}/stay/room/${id}`;
     axios
       .get(`/locations/${locationName}/json/room/${id}`)
-      .then(({ data: room }) => {
-        setRoom(room);
-        setIsLoading(false);
-      });
+      .then(({ data: room }) => setRoom(room));
 
     const stringifiedParams = qs.stringify(formattedDates);
     const urlLocation = {
@@ -52,11 +50,10 @@ function RoomDetail({ room: baseRoom, drftBalance, fees }) {
     !isEmpty(query) ? isFullyAvailable(room.availabilities) : false;
 
   useEffect(() => {
-    if (!room) {
-      setIsLoading(true);
-      fetchRoom({});
-    }
+    if (!roomExists) fetchRoom({});
   }, []);
+
+  useEffect(() => room && setIsLoading(false), [room]);
 
   return (
     <Loader loading={isLoading}>
