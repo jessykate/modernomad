@@ -966,7 +966,12 @@ def UserAddCard(request, username):
         profile.customer_id = customer.id
         logger.debug(customer.sources.data)
         # assumes the user has only one card stored with their profile.
-        profile.last4 = customer.sources.data[0].last4
+        customer.list_sources(customer.id)
+        sources = customer.list_sources(customer.id)
+        logger.debug(sources.data)
+        # assumes the user has only one card stored with their profile.
+        last4 = sources.data[0].last4
+        profile.last4 = last4
         profile.save()
         if booking_id and booking.use.status == Use.APPROVED:
             updated_booking_notify(booking)
