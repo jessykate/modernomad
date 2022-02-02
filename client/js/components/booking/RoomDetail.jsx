@@ -56,7 +56,7 @@ function RoomDetail({ room: baseRoom, drftBalance, fees }) {
   useEffect(() => room && setIsLoading(false), [room]);
 
   return (
-    <Loader loading={isLoading}>
+    <Loader loading={isLoading} renderChildren={() => (
       <div className="container room-detail">
         <Link
           to={{
@@ -90,6 +90,7 @@ function RoomDetail({ room: baseRoom, drftBalance, fees }) {
           </div>
         </div>
       </div>
+    )}>
     </Loader>
   );
 }

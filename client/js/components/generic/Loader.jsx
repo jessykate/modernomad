@@ -1,7 +1,7 @@
 import React from "react";
 import Skeleton from "react-loading-skeleton";
 
-function Loader({ loading, children }) {
+function Loader({ loading, children, renderChildren }) {
   return loading ? (
     <>
       <h3>
@@ -11,9 +11,7 @@ function Loader({ loading, children }) {
         <Skeleton count={5} />
       </p>
     </>
-  ) : (
-    children
-  );
+  ) : children || renderChildren()
 }
 
 export default Loader;
