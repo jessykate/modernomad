@@ -22,7 +22,7 @@ Then, start it up:
 
 ## Running tests locally
 
-There is an option to run tests outside of docker. This mainly consists in running the application as would be done for development. The only difference resides in using a different database. After switching the [`beforeEach` hook](../cypress/support/beforeEach.js) to using the local instructions, the following commands can be run:
+There is an option to run tests outside of docker. This mainly consists in running the application as would be done for development. The only difference consists in using a different database. After switching the [`beforeEach` hook](../cypress/support/beforeEach.js) to using the non-containerized instructions, the following commands can be run:
 
 ```bash
 # In a first shell
@@ -33,8 +33,7 @@ DATABASE_URL="postgres:///modernomad/test" python manage.py runserver
 cd client && node_modules/.bin/webpack-dev-server --port 3000
 
 # In a third shell
-npm install
-npm run cypress:open
+npm install && npm run cypress:open
 ```
 
 [1]: docker-development-environment.md

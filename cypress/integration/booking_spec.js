@@ -9,7 +9,6 @@ describe("Booking a room", function () {
     cy.contains("View all rooms").click();
     cy.get(".panel-body");
     cy.contains("Ada Lovelace").click({ force: true });
-    // cy.wait(2000);
 
     // Fill in booking form
     cy.get("input[name=arrive]").focus();
