@@ -7,7 +7,7 @@ if ! test -f .env; then
   cp .env.example .env
 fi
 
-psql postgres -c 'CREATE DATABASE modernomad;'  || true
+psql postgres -c 'CREATE DATABASE modernomad;' || true
 
 python manage.py migrate
 
