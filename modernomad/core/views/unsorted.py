@@ -885,8 +885,6 @@ def RoomsAvailableOnDates(request, location_slug):
 def username_available(request):
     '''AJAX request to check for existing user with the submitted username'''
     logger.debug('in username_available')
-    if not request.is_ajax():
-        return HttpResponseRedirect('/404')
     username = request.POST.get('username')
     users_with_username = len(User.objects.filter(username=username))
     if users_with_username:
@@ -902,8 +900,6 @@ def username_available(request):
 def email_available(request):
     '''AJAX request to check for existing user with the submitted email'''
     logger.debug('in email_available')
-    if not request.is_ajax():
-        return HttpResponseRedirect('/404')
     email = request.POST.get('email').lower()
     users_with_email = len(User.objects.filter(email=email))
     if users_with_email:
