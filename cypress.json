@@ -1,5 +1,6 @@
 {
   "baseUrl": "http://localhost:8000",
   "projectId": "3gfovh",
-  "chromeWebSecurity": false
+  "chromeWebSecurity": false,
+  "defaultCommandTimeout": 10000
 }
