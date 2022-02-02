@@ -964,8 +964,6 @@ def UserAddCard(request, username):
         logger.debug('customer %s', customer)
         profile = user.profile
         profile.customer_id = customer.id
-        logger.debug(customer.sources.data)
-        # assumes the user has only one card stored with their profile.
         customer.list_sources(customer.id)
         sources = customer.list_sources(customer.id)
         logger.debug(sources.data)
