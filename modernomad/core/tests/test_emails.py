@@ -1,5 +1,5 @@
 from django.test import TestCase
-import unittest
+from unittest.mock import patch
 from modernomad.core.factories import ResourceFactory
 from django.contrib.auth.models import User
 from modernomad.core.models import Payment, Use, Booking, UserProfile, LocationEmailTemplate
@@ -35,7 +35,7 @@ class EmailsTestCase(TestCase):
         # Patch mailgun
         class MockResponse():
             status_code = 200
-        self.mock_mailgun_send = unittest.mock.patch('modernomad.core.emails.messages.mailgun_send', return_value=MockResponse())
+        self.mock_mailgun_send = patch('modernomad.core.emails.messages.mailgun_send', return_value=MockResponse())
         self.mock_mailgun_send.start()
 
         self.resource = ResourceFactory()
