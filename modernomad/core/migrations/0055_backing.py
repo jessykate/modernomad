@@ -15,11 +15,15 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Backing',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID',
+                 serialize=False, auto_created=True, primary_key=True)),
                 ('accept_drft', models.BooleanField(default=True)),
-                ('account', models.ForeignKey(to='bank.Account')),
-                ('resource', models.ForeignKey(to='core.Resource')),
-                ('subscription', models.ForeignKey(blank=True, to='core.Subscription', null=True)),
+                ('account', models.ForeignKey(
+                    to='bank.Account', on_delete=models.CASCADE)),
+                ('resource', models.ForeignKey(
+                    to='core.Resource', on_delete=models.CASCADE)),
+                ('subscription', models.ForeignKey(
+                    blank=True, to='core.Subscription', null=True, on_delete=models.CASCADE)),
             ],
         ),
     ]

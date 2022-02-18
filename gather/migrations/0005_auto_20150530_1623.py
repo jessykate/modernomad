@@ -14,6 +14,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='eventadmingroup',
             name='location',
-            field=models.OneToOneField(related_name='event_admin_group', to='core.Location'),
+            field=models.OneToOneField(
+                related_name='event_admin_group', to='core.Location', on_delete=models.CASCADE),
         ),
     ]

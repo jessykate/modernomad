@@ -15,9 +15,11 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='UseTransaction',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('transaction', models.ForeignKey(to='bank.Transaction')),
-                ('use', models.ForeignKey(to='core.Use')),
+                ('id', models.AutoField(verbose_name='ID',
+                 serialize=False, auto_created=True, primary_key=True)),
+                ('transaction', models.ForeignKey(
+                    to='bank.Transaction', on_delete=models.CASCADE)),
+                ('use', models.ForeignKey(to='core.Use', on_delete=models.CASCADE)),
             ],
         ),
     ]

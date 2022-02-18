@@ -16,26 +16,34 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Subscription',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID',
+                 serialize=False, auto_created=True, primary_key=True)),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('updated', models.DateTimeField(auto_now=True)),
                 ('price', models.DecimalField(max_digits=9, decimal_places=2)),
-                ('description', models.CharField(max_length=256, null=True, blank=True)),
+                ('description', models.CharField(
+                    max_length=256, null=True, blank=True)),
                 ('start_date', models.DateField()),
                 ('end_date', models.DateField(null=True, blank=True)),
-                ('created_by', models.ForeignKey(related_name='+', default=1, to=settings.AUTH_USER_MODEL)),
-                ('location', models.ForeignKey(to='core.Location')),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('created_by', models.ForeignKey(related_name='+', default=1,
+                 to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
+                ('location', models.ForeignKey(
+                    to='core.Location', on_delete=models.CASCADE)),
+                ('user', models.ForeignKey(
+                    to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
             name='SubscriptionNote',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID',
+                 serialize=False, auto_created=True, primary_key=True)),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('note', models.TextField(null=True, blank=True)),
-                ('created_by', models.ForeignKey(to=settings.AUTH_USER_MODEL, null=True)),
-                ('subscription', models.ForeignKey(related_name='communitysubscription_notes', to='core.Subscription')),
+                ('created_by', models.ForeignKey(
+                    to=settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE)),
+                ('subscription', models.ForeignKey(
+                    related_name='communitysubscription_notes', to='core.Subscription', on_delete=models.CASCADE)),
             ],
         ),
         migrations.RemoveField(
@@ -76,6 +84,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='subscriptionbill',
             name='subscription',
-            field=models.ForeignKey(related_name='bills', to='core.Subscription', null=True),
+            field=models.ForeignKey(
+                related_name='bills', to='core.Subscription', null=True, on_delete=models.CASCADE),
         ),
     ]

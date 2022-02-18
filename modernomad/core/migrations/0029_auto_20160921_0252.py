@@ -20,21 +20,25 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='bookingnote',
             name='booking',
-            field=models.ForeignKey(related_name='booking_note', null=False, to='core.Booking'),
+            field=models.ForeignKey(
+                related_name='booking_note', null=False, to='core.Booking', on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='booking',
             name='bill',
-            field=models.OneToOneField(related_name='booking', null=True, to='core.BookingBill'),
+            field=models.OneToOneField(
+                related_name='booking', null=True, to='core.BookingBill', on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='booking',
             name='location',
-            field=models.ForeignKey(related_name='bookings', to='core.Location', null=True),
+            field=models.ForeignKey(
+                related_name='bookings', to='core.Location', null=True, on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='booking',
             name='user',
-            field=models.ForeignKey(related_name='bookings', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(
+                related_name='bookings', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
         ),
     ]

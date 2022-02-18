@@ -22,6 +22,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='entry',
             name='transaction',
-            field=models.ForeignKey(related_name='entries', to='bank.Transaction'),
+            field=models.ForeignKey(
+                related_name='entries', to='bank.Transaction', on_delete=models.CASCADE),
         ),
     ]

@@ -16,31 +16,39 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Account',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('currency', models.CharField(max_length=32, choices=[(b'usd', b'USD'), (b'euro', b'Euro'), (b'drft', b'DRFT')])),
+                ('id', models.AutoField(verbose_name='ID',
+                 serialize=False, auto_created=True, primary_key=True)),
+                ('currency', models.CharField(max_length=32, choices=[
+                 (b'usd', b'USD'), (b'euro', b'Euro'), (b'drft', b'DRFT')])),
                 ('created', models.DateTimeField(auto_now_add=True)),
-                ('users', models.ManyToManyField(related_name='accounts', to=settings.AUTH_USER_MODEL)),
+                ('users', models.ManyToManyField(
+                    related_name='accounts', to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
             name='Entry',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID',
+                 serialize=False, auto_created=True, primary_key=True)),
                 ('amount', models.IntegerField()),
-                ('account', models.ForeignKey(related_name='entries', to='core.Account')),
+                ('account', models.ForeignKey(related_name='entries',
+                 to='core.Account', on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
             name='Transaction',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID',
+                 serialize=False, auto_created=True, primary_key=True)),
                 ('created', models.DateTimeField(auto_now_add=True)),
-                ('approver', models.ForeignKey(related_name='approved_transactions', blank=True, to=settings.AUTH_USER_MODEL, null=True)),
+                ('approver', models.ForeignKey(related_name='approved_transactions',
+                 blank=True, to=settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE)),
             ],
         ),
         migrations.AddField(
             model_name='entry',
             name='transaction',
-            field=models.ForeignKey(to='core.Transaction'),
+            field=models.ForeignKey(
+                to='core.Transaction', on_delete=models.CASCADE),
         ),
     ]

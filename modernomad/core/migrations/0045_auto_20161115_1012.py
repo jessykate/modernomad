@@ -20,11 +20,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='account',
             name='admins',
-            field=models.ManyToManyField(related_name='accounts_administered', null=True, to=settings.AUTH_USER_MODEL, blank=True),
+            field=models.ManyToManyField(
+                related_name='accounts_administered', null=True, to=settings.AUTH_USER_MODEL, blank=True),
         ),
         migrations.AddField(
             model_name='account',
             name='owner',
-            field=models.ForeignKey(related_name='accounts_owned', blank=True, to=settings.AUTH_USER_MODEL, null=True),
+            field=models.ForeignKey(related_name='accounts_owned', blank=True,
+                                    to=settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE),
         ),
     ]

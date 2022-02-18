@@ -14,6 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='bookingnote',
             name='use',
-            field=models.ForeignKey(related_name='use_notes', blank=True, to='core.Use', null=True),
+            field=models.ForeignKey(related_name='use_notes', blank=True,
+                                    to='core.Use', null=True, on_delete=models.CASCADE),
         ),
     ]

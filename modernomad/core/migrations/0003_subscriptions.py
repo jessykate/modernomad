@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.db import models, migrations
 from django.conf import settings
 
+
 def forward(apps, schema_editor):
     Reservation = apps.get_model("core", "Reservation")
     Bill = apps.get_model("core", "Bill")
@@ -13,7 +14,8 @@ def forward(apps, schema_editor):
     for r in reservations:
         r.bill = ReservationBill.objects.create(bill_ptr=r.old_bill)
         r.save()
-        
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -25,11 +27,13 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='CommunitySubscription',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID',
+                 serialize=False, auto_created=True, primary_key=True)),
                 ('price', models.DecimalField(max_digits=9, decimal_places=2)),
                 ('start_date', models.DateField()),
                 ('end_date', models.DateField(null=True, blank=True)),
-                ('recurring_charge_date', models.IntegerField(default=1, help_text=b'The day of the month that the subscription will be charged. This is an integer value.')),
+                ('recurring_charge_date', models.IntegerField(
+                    default=1, help_text=b'The day of the month that the subscription will be charged. This is an integer value.')),
             ],
             options={
                 'abstract': False,
@@ -39,7 +43,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ReservationBill',
             fields=[
-                ('bill_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='core.Bill')),
+                ('bill_ptr', models.OneToOneField(parent_link=True, auto_created=True,
+                 primary_key=True, serialize=False, to='core.Bill', on_delete=models.CASCADE)),
             ],
             options={
             },
@@ -48,12 +53,15 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='RoomSubscription',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID',
+                 serialize=False, auto_created=True, primary_key=True)),
                 ('price', models.DecimalField(max_digits=9, decimal_places=2)),
                 ('start_date', models.DateField()),
                 ('end_date', models.DateField(null=True, blank=True)),
-                ('recurring_charge_date', models.IntegerField(default=1, help_text=b'The day of the month that the subscription will be charged. This is an integer value.')),
-                ('nights', models.IntegerField(help_text=b'How many nights does this subscription entitle the member to?')),
+                ('recurring_charge_date', models.IntegerField(
+                    default=1, help_text=b'The day of the month that the subscription will be charged. This is an integer value.')),
+                ('nights', models.IntegerField(
+                    help_text=b'How many nights does this subscription entitle the member to?')),
             ],
             options={
                 'abstract': False,
@@ -63,7 +71,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='SubscriptionBill',
             fields=[
-                ('bill_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='core.Bill')),
+                ('bill_ptr', models.OneToOneField(parent_link=True, auto_created=True,
+                 primary_key=True, serialize=False, to='core.Bill', on_delete=models.CASCADE)),
                 ('period_start', models.DateField()),
                 ('period_end', models.DateField()),
             ],
@@ -74,37 +83,43 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='roomsubscription',
             name='bills',
-            field=models.ManyToManyField(to='core.SubscriptionBill', null=True),
+            field=models.ManyToManyField(
+                to='core.SubscriptionBill', null=True),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='roomsubscription',
             name='location',
-            field=models.ForeignKey(to='core.Location'),
+            field=models.ForeignKey(
+                to='core.Location', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='roomsubscription',
             name='user',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(
+                to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='communitysubscription',
             name='bills',
-            field=models.ManyToManyField(to='core.SubscriptionBill', null=True),
+            field=models.ManyToManyField(
+                to='core.SubscriptionBill', null=True),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='communitysubscription',
             name='location',
-            field=models.ForeignKey(to='core.Location'),
+            field=models.ForeignKey(
+                to='core.Location', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='communitysubscription',
             name='user',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(
+                to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.RenameField(
@@ -115,13 +130,15 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='reservation',
             name='old_bill',
-            field=models.OneToOneField(related_name='old_related', null=True, to='core.Bill'),
+            field=models.OneToOneField(
+                related_name='old_related', null=True, to='core.Bill', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='reservation',
             name='bill',
-            field=models.OneToOneField(related_name='reservation', null=True, to='core.ReservationBill'),
+            field=models.OneToOneField(
+                related_name='reservation', null=True, to='core.ReservationBill', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.RunPython(forward, elidable=True),

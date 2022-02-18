@@ -14,7 +14,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='availability',
             name='resource',
-            field=models.ForeignKey(related_name='availabilities', to='core.Resource'),
+            field=models.ForeignKey(
+                related_name='availabilities', to='core.Resource', on_delete=models.CASCADE),
         ),
         migrations.AlterUniqueTogether(
             name='availability',

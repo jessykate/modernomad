@@ -66,6 +66,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='booking',
             name='use',
-            field=models.OneToOneField(related_name='booking', to='core.Use'),
+            field=models.OneToOneField(
+                related_name='booking', to='core.Use', on_delete=models.CASCADE),
         ),
     ]

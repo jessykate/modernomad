@@ -14,11 +14,13 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='usenote',
             name='booking_deprecated',
-            field=models.ForeignKey(related_name='booking_notes', blank=True, to='core.Booking', null=True),
+            field=models.ForeignKey(related_name='booking_notes', blank=True,
+                                    to='core.Booking', null=True, on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='usenote',
             name='use',
-            field=models.ForeignKey(related_name='use_notes', to='core.Use'),
+            field=models.ForeignKey(
+                related_name='use_notes', to='core.Use', on_delete=models.CASCADE),
         ),
     ]

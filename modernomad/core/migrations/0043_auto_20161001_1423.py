@@ -14,6 +14,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='capacitychange',
             name='resource',
-            field=models.ForeignKey(related_name='capacity_changes', to='core.Resource'),
+            field=models.ForeignKey(
+                related_name='capacity_changes', to='core.Resource', on_delete=models.CASCADE),
         ),
     ]

@@ -15,26 +15,31 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='event',
             name='attendees',
-            field=models.ManyToManyField(related_name='events_attending', to=settings.AUTH_USER_MODEL),
+            field=models.ManyToManyField(
+                related_name='events_attending', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AlterField(
             model_name='event',
             name='endorsements',
-            field=models.ManyToManyField(related_name='events_endorsed', to=settings.AUTH_USER_MODEL),
+            field=models.ManyToManyField(
+                related_name='events_endorsed', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AlterField(
             model_name='event',
             name='organizers',
-            field=models.ManyToManyField(related_name='events_organized', to=settings.AUTH_USER_MODEL),
+            field=models.ManyToManyField(
+                related_name='events_organized', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AlterField(
             model_name='eventadmingroup',
             name='location',
-            field=models.OneToOneField(to='core.Location'),
+            field=models.OneToOneField(
+                to='core.Location', on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='eventnotifications',
             name='location_weekly',
-            field=models.ManyToManyField(related_name='event_notifications', to='core.Location'),
+            field=models.ManyToManyField(
+                related_name='event_notifications', to='core.Location'),
         ),
     ]

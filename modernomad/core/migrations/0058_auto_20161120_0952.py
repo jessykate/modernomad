@@ -14,6 +14,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='backing',
             name='resource',
-            field=models.OneToOneField(to='core.Resource'),
+            field=models.OneToOneField(
+                to='core.Resource', on_delete=models.CASCADE),
         ),
     ]

@@ -19,13 +19,15 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='backing',
             name='drft_account',
-            field=models.ForeignKey(related_name='+', default=1, to='bank.Account'),
+            field=models.ForeignKey(
+                related_name='+', default=1, to='bank.Account', on_delete=models.CASCADE),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='backing',
             name='money_account',
-            field=models.ForeignKey(related_name='+', default=2, to='bank.Account'),
+            field=models.ForeignKey(
+                related_name='+', default=2, to='bank.Account', on_delete=models.CASCADE),
             preserve_default=False,
         ),
     ]

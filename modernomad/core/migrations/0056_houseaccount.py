@@ -15,9 +15,12 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='HouseAccount',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('account', models.ForeignKey(to='bank.Account')),
-                ('location', models.ForeignKey(to='core.Location')),
+                ('id', models.AutoField(verbose_name='ID',
+                 serialize=False, auto_created=True, primary_key=True)),
+                ('account', models.ForeignKey(
+                    to='bank.Account', on_delete=models.CASCADE)),
+                ('location', models.ForeignKey(
+                    to='core.Location', on_delete=models.CASCADE)),
             ],
         ),
     ]
