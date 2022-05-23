@@ -15,6 +15,7 @@ modernomad.komodoproject
 modernomad/local_settings.py.bak
 ghostdriver.log
 .env
+.venv
 static/CACHE/
 
 /node_modules

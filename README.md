@@ -13,7 +13,7 @@ feature list](docs/features.md) is also available.
 
 The easiest way to get up and running in development is by using Docker. See [Docker development environment](docs/docker-development-environment.md).
 
-If you can't or don't want to use Docker, see [Environment Setup](docs/environment-setup.md) and [How to Run](docs/how-to-run.md).
+If you can't or don't want to use Docker, get started with [Environment Setup](docs/environment-setup.md).
 
 ## Documentation
 
