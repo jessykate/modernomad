@@ -11,6 +11,13 @@ or with virtualenv something like `mkvirtualenv modernomad` which will usually c
 
 use the following commands to work with virtualenvwrapper: `workon` to work on a specific virtual env, `pip install blah` to install packages, `lssitepackages` to see packages installed in the virtual env.
 
+## Pipenv
+You can also use Pipenv to install and manage your virtual environment.
+```shell
+pipenv install --dev --python 3.9
+pipenv run django
+```
+
 ## clone the repository
 
 - make sure you have git installed
@@ -112,7 +119,3 @@ Start django and node services
 
 ## model updates
 see the instructions in [updates](updates.md) for how to create and run database migrations if you add or remove fields from models.
-
-
-
-
