@@ -7,6 +7,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils import timezone
+from django.contrib.auth import get_user_model
+
 
 from modernomad.core.models import Location
 
@@ -16,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 class EventAdminGroup(models.Model):
     ''' Define admininstrative groups per location.'''
-    location = models.OneToOneField(Location, related_name="event_admin_group")
+    location = models.OneToOneField(Location, on_delete=models.CASCADE, related_name="event_admin_group")
     users = models.ManyToManyField(User)
 
     def __str__(self):
@@ -77,6 +79,9 @@ class EventManager(models.Manager):
     class Meta:
         app_label = 'gather'
 
+def get_sentinel_user():
+    return get_user_model().objects.get_or_create(username='deleted')[0]
+
 
 class Event(models.Model):
     PENDING = 'waiting for approval'
@@ -115,7 +120,7 @@ class Event(models.Model):
     notifications = models.BooleanField(default=True)
     # where, site, place, venue
     where = models.CharField(verbose_name='Where will the event be held?', max_length=500, help_text="Either a specific room at this location or an address if elsewhere")
-    creator = models.ForeignKey(User, related_name="events_created")
+    creator = models.ForeignKey(User, on_delete=models.SET(get_sentinel_user), related_name="events_created")
     organizers = models.ManyToManyField(User, related_name="events_organized", blank=True)
     organizer_notes = models.TextField(blank=True, null=True, help_text="These will only be visible to other organizers")
     limit = models.IntegerField(default=0, help_text="Specify a cap on the number of RSVPs, or 0 for no limit.", blank=True)
@@ -125,9 +130,9 @@ class Event(models.Model):
     # the location field is optional but lets you associate an event with a
     # specific location object that is also managed by this software. a single
     # location or multiple locations can be defined.
-    location = models.ForeignKey(Location)
-    series = models.ForeignKey(EventSeries, related_name='events', blank=True, null=True)
-    admin = models.ForeignKey(EventAdminGroup, related_name='events')
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
+    series = models.ForeignKey(EventSeries, on_delete=models.DO_NOTHING, related_name='events', blank=True, null=True)
+    admin = models.ForeignKey(EventAdminGroup, on_delete=models.DO_NOTHING, related_name='events')
 
     objects = EventManager()
 
@@ -188,7 +193,7 @@ post_save.connect(default_event_status, sender=Event)
 
 
 class EventNotifications(models.Model):
-    user = models.OneToOneField(User, related_name='event_notifications')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='event_notifications')
     # send reminders on day-of the event?
     reminders = models.BooleanField(default=True)
     # receive weekly announcements about upcoming events?

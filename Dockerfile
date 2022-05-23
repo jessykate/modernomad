@@ -1,12 +1,13 @@
-FROM python:3.6.8-slim
+FROM python:3.10-slim
 
 RUN apt-get update -qq && apt-get install -yq \
     build-essential \
     curl \
-    netcat
+    netcat \
+    libpq-dev
 
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash
-RUN apt-get update -qq && apt-get install -yq nodejs npm
+RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash
+RUN apt-get update -qq && apt-get install -yq nodejs
 
 # https://bitbucket.org/site/master/issues/16334/pipelines-failing-with-could-not-get-uid
 # https://github.com/npm/npm/issues/20861

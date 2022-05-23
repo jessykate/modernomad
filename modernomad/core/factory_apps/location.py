@@ -20,7 +20,7 @@ one_year_ago = timezone.now() - datetime.timedelta(days=365)
 yesterday = timezone.now() - datetime.timedelta(days=1)
 
 
-class FeeFactory(factory.DjangoModelFactory):
+class FeeFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Fee
 
@@ -29,7 +29,7 @@ class FeeFactory(factory.DjangoModelFactory):
     paid_by_house = factory.Faker('pybool')
 
 
-class LocationFactory(factory.DjangoModelFactory):
+class LocationFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Location
         django_get_or_create = ('slug',)
@@ -127,7 +127,7 @@ class LocationFactory(factory.DjangoModelFactory):
         payment.SubscriptionBillFactory(subscription=subscription)
 
 
-class ResourceFactory(factory.DjangoModelFactory):
+class ResourceFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Resource
 
@@ -156,7 +156,7 @@ class ResourceFactory(factory.DjangoModelFactory):
         payment.PaymentFactory(bill=bill)
 
 
-class LocationFeeFactory(factory.DjangoModelFactory):
+class LocationFeeFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = LocationFee
 
@@ -164,7 +164,7 @@ class LocationFeeFactory(factory.DjangoModelFactory):
     fee = factory.SubFactory(FeeFactory)
 
 
-class LocationMenuFactory(factory.DjangoModelFactory):
+class LocationMenuFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = LocationMenu
 
@@ -172,12 +172,12 @@ class LocationMenuFactory(factory.DjangoModelFactory):
     name = factory.Faker('text', max_nb_chars=15)
 
 
-class FlatpageFactory(factory.DjangoModelFactory):
+class FlatpageFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = FlatPage
 
 
-class LocationFlatPageFactory(factory.DjangoModelFactory):
+class LocationFlatPageFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = LocationFlatPage
 
@@ -185,7 +185,7 @@ class LocationFlatPageFactory(factory.DjangoModelFactory):
     flatpage = factory.SubFactory(FlatpageFactory)
 
 
-class LocationEmailTemplateFactory(factory.DjangoModelFactory):
+class LocationEmailTemplateFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = LocationEmailTemplate
 
@@ -195,7 +195,7 @@ class LocationEmailTemplateFactory(factory.DjangoModelFactory):
     html_body = factory.Faker('text')
 
 
-class CapacityChangeFactory(factory.DjangoModelFactory):
+class CapacityChangeFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = CapacityChange
 
@@ -206,7 +206,7 @@ class CapacityChangeFactory(factory.DjangoModelFactory):
     accept_drft = factory.Faker('pybool')
 
 
-class BackingFactory(factory.DjangoModelFactory):
+class BackingFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Backing
 

@@ -3463,13 +3463,18 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   position: relative;
   display: block;
 }
+.availability-table-toggle > .nav-pills {
+  display: flex;
+}
+
 .nav > li > a {
   position: relative;
   display: block;
   padding: 10px 15px;
+  outline: none;
 }
-.nav > li > a:hover,
-.nav > li > a:focus {
+.nav-item > a:hover,
+.nav-item > a:focus {
   text-decoration: none;
   background-color: #eee;
 }
@@ -3576,9 +3581,9 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .nav-pills > li + li {
   margin-left: 2px;
 }
-.nav-pills > li.active > a,
-.nav-pills > li.active > a:hover,
-.nav-pills > li.active > a:focus {
+.nav-item > a.active,
+.nav-item > a.active:hover,
+.nav-item > a.active:focus {
   color: #fff;
   background-color: #428bca;
 }

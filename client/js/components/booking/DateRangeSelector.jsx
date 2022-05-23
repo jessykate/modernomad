@@ -1,8 +1,11 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
-import _ from 'lodash'
-import DATEFORMAT from './constants'
+import join from 'lodash/join'
+import { DATEFORMAT } from './constants'
+
+import "react-datepicker/dist/react-datepicker.css";
 
 function momentUnlessNull(dateString, parseFormat = null) {
 
@@ -35,7 +38,11 @@ export default class DateRangeSelector extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  /**
+   * Warning: componentWillReceiveProps has been renamed, and is not recommended for use.
+   * See https://reactjs.org/link/unsafe-component-lifecycles for details
+   */
+   UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.maxLength != nextProps.maxLength) {
       const currentDates = this.currentDates()
       const newDates = this.constrainDateRangeByStart(currentDates, nextProps.maxLength)
@@ -53,7 +60,7 @@ export default class DateRangeSelector extends React.Component {
   changeHandler(key) {
     return (value) => {
       let newState = {}
-      newState[key] = value
+      newState[key] = moment(value)
 
       newState.depart = this.constrainedDepartDate(
         newState.arrive,
@@ -106,20 +113,19 @@ export default class DateRangeSelector extends React.Component {
   }
 
   minDepart(currentArrive) {
-    const bestArrive = currentArrive || this.state.arrive || moment()
+    const bestArrive = moment(currentArrive || this.state.arrive)
     return bestArrive.clone().add(1, 'days')
   }
 
   maxDepart(currentArrive, maxLength) {
     if (!maxLength) return null
 
-    const bestArrive = currentArrive || this.state.arrive || moment()
+    const bestArrive = moment(currentArrive || this.state.arrive)
     return bestArrive.clone().add(maxLength, 'days')
   }
 
   render() {
-    const controlClasses = _.join(["form-control", this.props.inputClass], ' ')
-
+    const controlClasses = join(["form-control", this.props.inputClass], ' ')
     return (
       <div className="row">
         <div className={(this.props.detail ? "col-sm-2" : "col-md-2 col-sm-4")}><h4 className={(this.props.detail ? "detail-size" : "index-size")}>Dates</h4></div>
@@ -128,11 +134,11 @@ export default class DateRangeSelector extends React.Component {
             placeholderText="Arrive"
             selectsStart
             className={controlClasses}
-            selected={this.state.arrive}
-            startDate={this.state.arrive}
-            endDate={this.state.depart}
+            selected={this.state.arrive?.toDate()}
+            startDate={this.state.arrive?.toDate()}
+            endDate={this.state.depart?.toDate()}
             onChange={this.changeHandler('arrive')}
-            minDate={moment()}
+            minDate={moment().toDate()}
             autoComplete="off" />
         </div>
         <div className={(this.props.detail ? "col-sm-5" : "col-md-2 col-sm-4")}>
@@ -140,11 +146,11 @@ export default class DateRangeSelector extends React.Component {
             placeholderText="Depart"
             selectsEnd
             className={controlClasses}
-            selected={this.state.depart}
-            startDate={this.state.arrive}
-            endDate={this.state.depart}
+            selected={this.state.depart?.toDate()}
+            startDate={this.state.arrive?.toDate()}
+            endDate={this.state.depart?.toDate()}
             onChange={this.changeHandler('depart')}
-            minDate={this.minDepart()}
+            minDate={this.minDepart()?.toDate()}
             maxDate={this.maxDepart(null, this.props.maxLength)}
             autoComplete="off"
             />

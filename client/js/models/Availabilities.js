@@ -1,8 +1,7 @@
-import _ from 'lodash'
-
+import find from "lodash/find";
 
 export function isFullyAvailable(availabilities) {
-  return !_.find(availabilities, (availability) => {
-    return availability.quantity <= 0
-  })
+  return !find(availabilities, (availability) => {
+    return availability.quantity <= 0;
+  });
 }

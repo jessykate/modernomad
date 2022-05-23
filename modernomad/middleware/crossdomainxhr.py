@@ -30,7 +30,7 @@ except:
     XS_SHARING_ALLOWED_HEADERS = []
 
 
-class CORSMiddleware(object):
+class CORSMiddleware:
     """
         This middleware allows cross-domain XHR using the html5 postMessage API.
 

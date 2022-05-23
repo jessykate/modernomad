@@ -1,5 +1,5 @@
 import graphene
-from graphene import AbstractType, Field, Node
+from graphene import ObjectType, Field, Node
 from graphene_django.types import DjangoObjectType
 from graphene.types import String
 from graphene_django.filter import DjangoFilterConnectionField
@@ -51,18 +51,18 @@ class OccupantNode(DjangoObjectType):
         return "guest"
 
 
-class Query(AbstractType):
+class Query(ObjectType):
     my_occupancies = DjangoFilterConnectionField(OccupantNode)
     my_current_occupancies = DjangoFilterConnectionField(OccupantNode)
 
     def resolve_my_occupancies(self, info):
-        if not info.context.user.is_authenticated():
+        if not info.context.user.is_authenticated:
             return Use.objects.none()
         else:
             return Use.objects.filter(user=info.context.user)
 
     def resolve_my_current_occupancies(self, info):
-        if not info.context.user.is_authenticated():
+        if not info.context.user.is_authenticated:
             return Use.objects.none()
         else:
             today = timezone.now()

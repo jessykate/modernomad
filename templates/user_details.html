@@ -11,9 +11,9 @@
     {% if u.profile.city != "" %}
     <em> based in {{ u.profile.city }}</em>
     {% else %}
-        {% ifequal u user %}
+        {% if u == user %}
             <span class="alert bg-danger">Important! Please <a href="{% url 'user_edit' user.username%}">update your home city</a></span>
-        {% endifequal %}
+        {% endif %}
     {% endif %}
 </div>
 
@@ -32,7 +32,7 @@
     </div>
 
     <div id="edit-profile">
-        {% ifequal u user %}
+        {% if u == user %}
         <div>
             {% if u.profile.drft_spending_balance > 0 %}
                 <h4>
@@ -60,7 +60,7 @@
             {% endif %}
 
         </div>
-        {% endifequal %}
+        {% endif %}
 
         {% if user_is_house_admin_somewhere %}
             <div class="dropdown top-spacer-sm">

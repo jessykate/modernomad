@@ -21,19 +21,19 @@ depending on your connection!
 
 Next, install [brew](http://mxcl.github.io/homebrew/)!
 
-Install the `wget` tool, which is not installed on OS X by default: 
+Install the `wget` tool, which is not installed on OS X by default:
 
 - `brew install wget`
 
 ## Python
 
-Ensure you have python3 installed and ready to use. All `python` commands below assume `python3`. 
+Ensure you have python3 installed and ready to use. All `python` commands below assume `python3`.
 
 ### OSX
 
 `brew install pyenv`
 `pyenv install <latest>` (where latest is the latest version, can be determined running `pyenv install -l`)
-`pyenv global <latest>` (set global version defaul)
+`pyenv global <latest>` (set global version default)
 `pyenv version` (to verify it worked)
 
 add the following to your `.zshrc` or `.bash_profile`
@@ -48,20 +48,20 @@ fi
 ## Pip and Virtualenv
 
 Pip is Python's package manager, and virtualenv is a tool that lets you create
-self-contained environments for sets of python libraries. 
+self-contained environments for sets of python libraries.
 
 Each virtualenv contains its own install of pip, but you need pip to be
 installed globally in order to install virtualenv and virtualenvwrapper (or, at
-least, this is the easiest way to get those dependencies). 
+least, this is the easiest way to get those dependencies).
 
-Install pip following instructions at https://pip.pypa.io/en/latest/installation/. 
+Install pip following instructions at https://pip.pypa.io/en/latest/installation/.
 
 optionally verify your install
 - `pip --version`
 
 Decide on a virtual environment manager. python 3.3+ includes `venv` by
 default. alternatively, you can also use `virtualenv` and (if you want to stay
-sane) `virtualenvwrapper`. 
+sane) `virtualenvwrapper`.
 
 ## Node
 
@@ -78,7 +78,7 @@ Install npm e.g. as per https://www.digitalocean.com/community/tutorials/how-to-
 
 (Possibly deprecated??)
 
-`sudo apt-get install python-dev libxslt-dev libxml2-dev node-less` 
+`sudo apt-get install python-dev libxslt-dev libxml2-dev node-less`
 
 ## Supporting Services
 

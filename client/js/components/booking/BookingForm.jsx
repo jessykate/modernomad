@@ -1,15 +1,15 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import moment from 'moment'
 import DateRangeSelector from './DateRangeSelector'
-import ImageCarousel from './ImageCarousel'
 import { Link } from 'react-router-dom'
-import { Panel, FormGroup, ControlLabel, FormControl, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Accordion, FormGroup, FormLabel, FormControl, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import Feedback from 'react-bootstrap/Feedback'
 
 import DjangoCSRFInput from '../generic/DjangoCSRFInput'
 import BookingDisplay from './BookingDisplay'
 import { Booking } from '../../models/Booking'
-import makeParam from '../generic/Utils'
-import DATEFORMAT from './constants'
+import { DATEFORMAT } from './constants'
 
 
 export default class BookingForm extends React.Component {
@@ -126,40 +126,36 @@ export default class BookingForm extends React.Component {
           />
         </div>
         {this.props.datesAvailable || !this.props.query.arrive ?
-          <div>
-            {this.props.datesAvailable ?
-              <div>
+          <>
+            {this.props.datesAvailable &&
+              <>
                 {this.renderCost()}
 
-                <FormGroup validationState={this.validationState()} controlId="formControlsTextarea">
-                  <p>*Tell us a little about the purpose of your trip</p>
-                  {this.validationState() == 'error' && <ControlLabel>You must write a purpose for your stay</ControlLabel>}
-                  <FormControl componentClass="textarea" name="purpose" onChange={this.changePurpose.bind(this)} />
+                <FormGroup controlId="formControlsTextarea">
+                  <FormLabel>*Tell us a little about the purpose of your trip</FormLabel>
+                  {this.validationState() === 'error' && <Feedback type="invalid">You must write a purpose for your stay</Feedback>}
+                  <FormControl type="textarea" name="purpose" onChange={this.changePurpose.bind(this)} required />
                 </FormGroup>
-
                 <p>
                   <a className="btn-link" onClick={this.handlePanel.bind(this)}>
                     <span className={(this.state.open ? "fa fa-chevron-down" : "fa fa-chevron-right")}></span> Optional fields
                   </a>
                 </p>
-                <Panel collapsible expanded={this.state.open} className="optional-fields">
+                <div className={`optional-fields${this.state.open ? '' : ' closed'}`}>
                   <p>Arrival time</p>
                   <input className="form-control" name="arrival_time" />
                   <p>Comments</p>
                   <textarea className="form-control" name="comments" />
-                </Panel>
-              </div>
-              :
-              <div></div>
+                </div>
+              </>
             }
             <button className="btn btn-primary btn-block btn-brand" id="submit-booking-request">Request to Book</button>
-
-          </div>
+          </>
           :
-          <div>
+          <>
             <p className="text-center">Those dates are not available</p>
             <Link className="btn btn-default btn-block" to={this.indexLinkDetails()}>View other rooms</Link>
-          </div>
+          </>
         }
       </form>
     )

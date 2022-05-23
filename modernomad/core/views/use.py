@@ -7,7 +7,7 @@ import logging
 from django.contrib import messages
 from django.contrib.sites.models import Site
 from django.http import HttpResponse, HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from modernomad.core.models import Use, Location
 
