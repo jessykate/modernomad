@@ -1,4 +1,5 @@
 import Money from 'js-money'
+import map from 'lodash/map'
 
 function roundToTwo(num) {
   return +(Math.round(num + "e+2")  + "e-2");
@@ -144,7 +145,7 @@ export class Booking {
   _buildFeeItems(fees, baseAmount) {
     var runningTotal = baseAmount
 
-    return _.map(fees, (fee) => {
+    return map(fees, (fee) => {
       var item = new FeeLineItem({fee: fee, previousTotal: runningTotal})
       runningTotal = runningTotal.add(item.amount())
       return item

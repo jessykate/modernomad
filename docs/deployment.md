@@ -20,6 +20,10 @@ If you want to set up a Bucketeer bucket with a custom name:
     $ heroku addons:destroy -a embassynetwork-production BUCKETEER
     $ heroku addons:create -a embassynetwork-production bucketeer:micro --bucket-name media.embassynetwork.com
 
+If the app doesn't automatically provision specific add-ons, add them manually based on the list specified in heroku.yml.
+
+Update the `ALLOWED_HOSTS` env variable to include your hostname.
+
 ## Staging environment and Heroku Pipelines
 
 On embassynetwork.com, we have a separate staging environment, https://staging.embassynetwork.com/, that is deployed on every commit to master. It has a complete copy of production data so we can check things work on real data.
@@ -82,15 +86,15 @@ For example, for embassynetwork.com our S3 bucket is called `media.embassynetwor
 
 ## Payments
 
-Stripe is used for payment processing. 
+Stripe is used for payment processing.
 
 ## Email sending
 
 Emails are sent using Mailgun. Using mailgun we configure routes to associate
 with specific modernomad HTTP endpoints, which trigger function calls in the
-code. 
+code.
 
-Mailgun credentials are stored in Heroku environment variables. 
+Mailgun credentials are stored in Heroku environment variables.
 
 ## Backups
 

@@ -13,12 +13,13 @@ import uuid
 from django.db.models import Q
 from decimal import Decimal
 from django.utils import timezone
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.flatpages.models import FlatPage
 from modernomad.core.libs.dates import dates_within, count_range_objects_on_day
 from imagekit.models import ImageSpecField, ProcessedImageField
 from imagekit.processors import ResizeToFill
 import pytz
+from django.contrib.auth import get_user_model
 
 # imports for signals
 import django.dispatch
@@ -332,7 +333,7 @@ class ResourceManager(models.Manager):
 
 class Resource(models.Model):
     name = models.CharField(max_length=200)
-    location = models.ForeignKey(Location, related_name='resources', null=True)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='resources', null=True)
     default_rate = models.DecimalField(decimal_places=2, max_digits=9)
     description = models.TextField(blank=True, null=True, help_text="Displayed on room detail page only")
     summary = models.CharField(max_length=140, help_text="Displayed on the search page. Max length 140 chars", default='')
@@ -784,9 +785,9 @@ class SubscriptionManager(models.Manager):
 class Subscription(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(User, related_name="+")
-    location = models.ForeignKey(Location)
-    user = models.ForeignKey(User)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="+")
+    location = models.ForeignKey(Location, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     price = models.DecimalField(decimal_places=2, max_digits=9)
     description = models.CharField(max_length=256, blank=True, null=True)
     start_date = models.DateField()
@@ -1087,7 +1088,7 @@ class Subscription(models.Model):
 class SubscriptionBill(Bill):
     period_start = models.DateField()
     period_end = models.DateField()
-    subscription = models.ForeignKey(Subscription, related_name="bills", null=True)
+    subscription = models.ForeignKey(Subscription, on_delete=models.CASCADE, related_name="bills", null=True)
 
     class Meta:
         ordering = ["-period_start"]
@@ -1114,6 +1115,8 @@ class SubscriptionBill(Bill):
 class BookingBill(Bill):
     pass
 
+def get_sentinel_user():
+    return get_user_model().objects.get_or_create(username='deleted')[0]
 
 class Use(models.Model):
     ''' record of a use for a specific resource.'''
@@ -1148,13 +1151,13 @@ class Use(models.Model):
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    location = models.ForeignKey(Location, related_name='uses', null=True)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='uses', null=True)
     status = models.CharField(max_length=200, choices=USE_STATUSES, default=PENDING, blank=True)
-    user = models.ForeignKey(User, related_name='uses')
+    user = models.ForeignKey(User, on_delete=models.SET(get_sentinel_user), related_name='uses')
     arrive = models.DateField(verbose_name='Arrival Date')
     depart = models.DateField(verbose_name='Departure Date')
     arrival_time = models.CharField(help_text='Optional, if known', max_length=200, blank=True, null=True)
-    resource = models.ForeignKey(Resource, null=True)
+    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, null=True)
     purpose = models.TextField(verbose_name='Tell us a bit about the reason for your trip/stay')
     last_msg = models.DateTimeField(blank=True, null=True)
     accounted_by = models.CharField(max_length=200, choices=USE_ACCOUNTING, default=FIAT, blank=True)
@@ -1226,13 +1229,13 @@ class Booking(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     # deprecated fields to be deleted soon ("soon")
-    location_deprecated = models.ForeignKey(Location, related_name='bookings', null=True)
+    location_deprecated = models.ForeignKey(Location, on_delete=models.DO_NOTHING, related_name='bookings', null=True)
     status_deprecated = models.CharField(max_length=200, choices=BOOKING_STATUSES, default=PENDING, blank=True, null=True)
-    user_deprecated = models.ForeignKey(User, related_name='bookings', null=True)
+    user_deprecated = models.ForeignKey(User, on_delete=models.SET(get_sentinel_user), related_name='bookings', null=True)
     arrive_deprecated = models.DateField(verbose_name='Arrival Date', null=True)
     depart_deprecated = models.DateField(verbose_name='Departure Date', null=True)
     arrival_time_deprecated = models.CharField(help_text='Optional, if known', max_length=200, blank=True, null=True)
-    resource_deprecated = models.ForeignKey(Resource, null=True)
+    resource_deprecated = models.ForeignKey(Resource, on_delete=models.DO_NOTHING, null=True)
     tags_deprecated = models.CharField(max_length=200, help_text='What are 2 or 3 tags that characterize this trip?', blank=True, null=True)
     purpose_deprecated = models.TextField(verbose_name='Tell us a bit about the reason for your trip/stay', null=True)
     last_msg_deprecated = models.DateTimeField(blank=True, null=True)
@@ -1240,13 +1243,12 @@ class Booking(models.Model):
     comments = models.TextField(blank=True, null=True, verbose_name='Any additional comments. (Optional)')
     rate = models.DecimalField(max_digits=9, decimal_places=2, null=True, blank=True, help_text="Uses the default rate unless otherwise specified.")
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)  # the blank and null = True are artifacts of the migration JKS
-    bill = models.OneToOneField(BookingBill, null=True, related_name="booking")
+    bill = models.OneToOneField(BookingBill, on_delete=models.DO_NOTHING, null=True, related_name="booking")
     suppressed_fees = models.ManyToManyField(Fee, blank=True)
-    use = models.OneToOneField(Use, null=False, related_name="booking")
+    use = models.OneToOneField(Use, on_delete=models.DO_NOTHING, null=False, related_name="booking")
 
-    @models.permalink
     def get_absolute_url(self):
-        return ('booking_detail', [str(self.use.location.slug), str(self.id)])
+        return reverse('booking_detail', args=([str(self.use.location.slug), str(self.id)]))
 
     def generate_bill(self, delete_old_items=True, save=True, reset_suppressed=False):
         # during the booking process, we simulate a booking to generate
@@ -1491,8 +1493,8 @@ class PaymentManager(models.Manager):
 
 
 class Payment(models.Model):
-    bill = models.ForeignKey(Bill, related_name="payments", null=True)
-    user = models.ForeignKey(User, related_name="payments", null=True)
+    bill = models.ForeignKey(Bill, on_delete=models.CASCADE, related_name="payments", null=True)
+    user = models.ForeignKey(User, on_delete=models.SET(get_sentinel_user), related_name="payments", null=True)
     payment_date = models.DateTimeField(auto_now_add=True)
     payment_service = models.CharField(max_length=200, blank=True, null=True, help_text="e.g., Stripe, Paypal, Dwolla, etc. May be empty")
     payment_method = models.CharField(max_length=200, blank=True, null=True, help_text="e.g., Visa, cash, bank transfer")
@@ -1601,7 +1603,7 @@ def profile_img_upload_to(instance, filename):
 class UserProfile(models.Model):
     # User model fields: username, first_name, last_name, email,
     # password, is_staff, is_active, is_superuser, last_login, date_joined,
-    user = models.OneToOneField(User, related_name='profile')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     updated = models.DateTimeField(auto_now=True)
     image = ProcessedImageField(
         upload_to=profile_img_upload_to,
@@ -1729,7 +1731,7 @@ class EmailTemplate(models.Model):
     body = models.TextField(verbose_name="The body of the email")
     subject = models.CharField(max_length=200, verbose_name="Default Subject Line")
     name = models.CharField(max_length=200, verbose_name="Template Name")
-    creator = models.ForeignKey(User)
+    creator = models.ForeignKey(User, on_delete=models.SET(get_sentinel_user))
     shared = models.BooleanField(default=False)
     context = models.CharField(max_length=32, choices=context_options, blank=False, null=False)
 
@@ -1760,25 +1762,25 @@ class LocationEmailTemplate(models.Model):
             (DEPARTURE, 'Departure'),
         )
 
-    location = models.ForeignKey(Location)
+    location = models.ForeignKey(Location, on_delete=models.DO_NOTHING)
     key = models.CharField(max_length=32, choices=KEYS)
     text_body = models.TextField(verbose_name="The text body of the email")
     html_body = models.TextField(blank=True, null=True, verbose_name="The html body of the email")
 
 
 class LocationFee(models.Model):
-    location = models.ForeignKey(Location)
-    fee = models.ForeignKey(Fee)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
+    fee = models.ForeignKey(Fee, on_delete=models.CASCADE)
 
     def __str__(self):
         return '%s: %s' % (self.location, self.fee)
 
 
 class BillLineItem(models.Model):
-    bill = models.ForeignKey(Bill, related_name="line_items", null=True)
+    bill = models.ForeignKey(Bill, on_delete=models.CASCADE, related_name="line_items", null=True)
     # the fee that this line item was based on, if any (line items are also
     # generated for the base resource rate, which doesn't have an associated fee)
-    fee = models.ForeignKey(Fee, null=True)
+    fee = models.ForeignKey(Fee, on_delete=models.DO_NOTHING, null=True)
     description = models.CharField(max_length=200)
     # the actual amount of this line item (if this is a line item derived from
     # a fee, generally it will be the fee amount but, technically, not
@@ -1792,7 +1794,7 @@ class BillLineItem(models.Model):
 
 
 class LocationMenu(models.Model):
-    location = models.ForeignKey(Location)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
     name = models.CharField(
         max_length=15,
         help_text="A short title for your menu. Note: If there is only one page in the menu, it will be used as a " +
@@ -1808,10 +1810,10 @@ class LocationMenu(models.Model):
 
 class LocationFlatPage(models.Model):
     menu = models.ForeignKey(
-        LocationMenu, related_name="pages",
+        LocationMenu, on_delete=models.DO_NOTHING, related_name="pages",
         help_text="Note: If there is only one page in the menu, it will be used as a top level nav item, and the menu name will not be used."
     )
-    flatpage = models.OneToOneField(FlatPage)
+    flatpage = models.OneToOneField(FlatPage, on_delete=models.CASCADE)
 
     def slug(self):
         url = self.flatpage.url
@@ -1832,8 +1834,8 @@ class LocationFlatPage(models.Model):
 
 class UserNote(models.Model):
     created = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, null=True)
-    user = models.ForeignKey(User, blank=False, null=False, related_name="user_notes")
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False, related_name="user_notes")
     note = models.TextField(blank=True, null=True)
 
     def __str__(self):
@@ -1842,9 +1844,9 @@ class UserNote(models.Model):
 
 class UseNote(models.Model):
     created = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, null=True)
-    booking_deprecated = models.ForeignKey(Booking, blank=True, null=True, related_name="booking_notes")
-    use = models.ForeignKey(Use, blank=False, null=False, related_name="use_notes")
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    booking_deprecated = models.ForeignKey(Booking, on_delete=models.CASCADE, blank=True, null=True, related_name="booking_notes")
+    use = models.ForeignKey(Use, on_delete=models.CASCADE, blank=False, null=False, related_name="use_notes")
     note = models.TextField(blank=True, null=True)
 
     def __str__(self):
@@ -1853,8 +1855,8 @@ class UseNote(models.Model):
 
 class SubscriptionNote(models.Model):
     created = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, null=True)
-    subscription = models.ForeignKey(Subscription, blank=False, null=False, related_name="communitysubscription_notes")
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    subscription = models.ForeignKey(Subscription, on_delete=models.CASCADE, blank=False, null=False, related_name="communitysubscription_notes")
     note = models.TextField(blank=True, null=True)
 
     def __str__(self):
@@ -1909,7 +1911,7 @@ class CapacityChangeManager(models.Manager):
 
 class CapacityChange(models.Model):
     created = models.DateTimeField(auto_now_add=True)
-    resource = models.ForeignKey(Resource, related_name="capacity_changes")
+    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name="capacity_changes")
     start_date = models.DateField()
     quantity = models.IntegerField()
     accept_drft = models.BooleanField(default=False)
@@ -1937,10 +1939,10 @@ class BackingManager(models.Manager):
 
 
 class Backing(models.Model):
-    resource = models.ForeignKey(Resource, related_name='backings')
-    money_account = models.ForeignKey(Account, related_name='+')
-    drft_account = models.ForeignKey(Account, related_name='+')
-    subscription = models.ForeignKey(Subscription, blank=True, null=True)
+    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='backings')
+    money_account = models.ForeignKey(Account, on_delete=models.DO_NOTHING, related_name='+')
+    drft_account = models.ForeignKey(Account, on_delete=models.DO_NOTHING, related_name='+')
+    subscription = models.ForeignKey(Subscription, on_delete=models.DO_NOTHING, blank=True, null=True)
     users = models.ManyToManyField(User, related_name="backings")
     start = models.DateField(default=django.utils.timezone.now)
     end = models.DateField(blank=True, null=True)
@@ -1998,13 +2000,13 @@ class Backing(models.Model):
 
 
 class HouseAccount(models.Model):
-    location = models.ForeignKey(Location)
-    account = models.ForeignKey(Account)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
 
 
 class UseTransaction(models.Model):
-    use = models.ForeignKey(Use)
-    transaction = models.ForeignKey(Transaction)
+    use = models.ForeignKey(Use, on_delete=models.CASCADE)
+    transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE)
 
     def __str__(self):
         return "Transaction %d <> Use %d" % (self.transaction.id, self.use.id)

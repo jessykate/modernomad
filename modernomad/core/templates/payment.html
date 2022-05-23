@@ -12,7 +12,7 @@
 
             <h2 id="submit-payment-header">Submit Payment for this booking</h2>
 
-            <div id="payment-errors"></div> 
+            <div id="payment-errors"></div>
 
             <form action="{% url 'booking_payment' location.slug r.uuid %}" method="POST" class="form-horizontal" id="payment-form">{% csrf_token %}
 
@@ -116,13 +116,13 @@
     </div>
 
     <div class="row text-center">
-        {% ifequal r.user user %}
+        {% if r.user == user %}
             <a href="{% url 'booking_detail' r.use.location.slug r.id %}">Return to Booking Detail</a>
         {% else %}
             {% if user in location.house_admins.all %}
                 <a href="{% url 'booking_manage' r.use.location.slug r.id %}">Manage Booking</a>
             {% endif %}
-        {% endifequal %}
+        {% endif %}
     </div>
 
 {% endblock %}
@@ -142,7 +142,7 @@
         // single-use token. this triggers the stripeResponseHandler,
         // which submits the token value and any other named elements
         // (note: form elements witout names are *not* submitted) to
-        // our server for further action. 
+        // our server for further action.
         $("#payment-form").submit(function(event) {
             // disable the submit button to prevent repeated clicks
             $('.submit-button').attr("disabled", "disabled");

@@ -19,3 +19,5 @@ ghostdriver.log
 static/CACHE/
 
 /node_modules
+client/dist/
+client/webpack-stats-prod.json

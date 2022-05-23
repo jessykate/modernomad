@@ -4,21 +4,36 @@ We use [Cypress](https://www.cypress.io/) to test the high-level features of Mod
 
 The results of the tests that are run on Travis are public and [you can see them here](https://dashboard.cypress.io/#/projects/3gfovh/runs).
 
-Cypress needs to run on your local machine, not inside Docker or a VM, because it has to start and control your browser. It also assumes your development is running inside Docker when it clears the database before each test run. (TODO: There should be an option to run the database commands outside Docker.)
+Cypress needs to run on your local machine, not inside Docker or a VM, because it has to start and control your browser. It also assumes your development is running inside Docker when it clears the database before each test run.
 
-Read through the [docker development][1] for how to run the docker container. You also need to set the stripe environment variables for the tests to run successfully. Take a look at `.travis.yml` to see which keys are being set. 
+Read through the [docker development][1] for how to run the docker container. You also need to set the stripe environment variables for the tests to run successfully. Take a look at `.travis.yml` to see which keys are being set.
 
 First, install Cypress:
 
     $ npm install
 
-To run the Cypress tests, make sure your docker instance is running and the migrations are up to date. The tests also assume that the `generate_test_data` command has been run (so there is test data in the database). *Warning:* running cypress tests will blow away your test database, so make sure there's nothing in there you care about. 
+To run the Cypress tests, make sure your docker instance is running and the migrations are up to date. The tests also assume that the `generate_test_data` command has been run (so there is test data in the database). *Warning:* running cypress tests will blow away your test database, so make sure there's nothing in there you care about.
 
-Then, start it up: 
+Then, start it up:
 
     npm run cypress:open
 
 [The Cypress documentation has information on how to run and write tests.](https://docs.cypress.io/) The test cases are in `cypress/fixtures/`.
 
+## Running tests locally
+
+There is an option to run tests outside of docker. This mainly consists in running the application as would be done for development. The only difference consists in using a different database. After switching the [`beforeEach` hook](../cypress/support/beforeEach.js) to using the non-containerized instructions, the following commands can be run:
+
+```bash
+# In a first shell
+psql postgres -c 'CREATE DATABASE modernomad;' || true
+DATABASE_URL="postgres:///modernomad/test" python manage.py runserver
+
+# In a second shell
+cd client && node_modules/.bin/webpack-dev-server --port 3000
+
+# In a third shell
+npm install && npm run cypress:open
+```
 
 [1]: docker-development-environment.md

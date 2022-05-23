@@ -1,4 +1,4 @@
-from django.conf.urls import include, url
+from django.urls import include, re_path
 
 from rest_framework import routers
 from api.views.capacities import capacities, capacity_detail
@@ -8,8 +8,8 @@ import rest_framework.urls
 router = routers.DefaultRouter()
 
 urlpatterns = [
-    url(r'^', include(router.urls)),
-    url(r'^capacities/$', capacities),
-    url(r'^capacity/(?P<capacity_id>[0-9]+)$', capacity_detail),
-    url(r'^api-auth/', include(rest_framework.urls, namespace='rest_framework')),
+    re_path(r'^', include(router.urls)),
+    re_path(r'^capacities/$', capacities),
+    re_path(r'^capacity/(?P<capacity_id>[0-9]+)$', capacity_detail),
+    re_path(r'^api-auth/', include(rest_framework.urls, namespace='rest_framework')),
 ]

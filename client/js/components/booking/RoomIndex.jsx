@@ -1,10 +1,13 @@
-import React, {PropTypes} from 'react'
-import RoomCard from './RoomCard'
+import React from 'react'
+import PropTypes from 'prop-types'
 import DateRangeSelector from './DateRangeSelector'
 import AvailabilityMatrix from './AvailabilityMatrix'
-import { FormGroup, Checkbox, Button, Nav, NavItem } from 'react-bootstrap';
+import { Nav, NavItem, NavLink } from 'react-bootstrap';
 import { isFullyAvailable } from '../../models/Availabilities'
 import RoomCards from './RoomCards'
+import filter from 'lodash/filter';
+
+import "../styles/booking/RoomIndex.css"
 
 export default class RoomIndex extends React.Component {
   static propTypes = {
@@ -35,7 +38,7 @@ export default class RoomIndex extends React.Component {
 
   displayableRooms() {
     if (this.hasDateQuery()) {
-      return _.filter(this.props.rooms, (room) => {
+      return filter(this.props.rooms, (room) => {
         return isFullyAvailable(room.availabilities)
       })
     } else {
@@ -57,13 +60,17 @@ export default class RoomIndex extends React.Component {
           <div className="container">
             <div className="row availability-table-toggle">
               <Nav
-                bsStyle="pills"
+                variant="pills"
                 className="pull-right"
                 activeKey={this.state.activeKey}
                 onSelect={this.handleSelect.bind(this)}
               >
-                <NavItem eventKey={1} title="Room Grid"><i className="fa fa-th"></i></NavItem>
-                <NavItem eventKey={2} title="Availability Matrix"><i className="fa fa-list"></i></NavItem>
+                <NavItem title="Room Grid">
+                  <NavLink eventKey={1}><i className="fa fa-th"></i></NavLink>
+                </NavItem>
+                <NavItem title="Availability Matrix">
+                  <NavLink eventKey={2}><i className="fa fa-list"></i></NavLink>
+                </NavItem>
               </Nav>
             </div>
             {

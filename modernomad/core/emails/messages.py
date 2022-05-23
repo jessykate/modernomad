@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.core import urlresolvers
+from django.urls import reverse
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
@@ -160,7 +160,7 @@ def new_booking_notify(booking):
         'projects' : booking.use.user.profile.projects,
         'sharing': booking.use.user.profile.sharing,
         'discussion' : booking.use.user.profile.discussion,
-        "admin_url" : "https://" + domain + urlresolvers.reverse('booking_manage', args=(location.slug, booking.id,))
+        "admin_url" : "https://" + domain + reverse('booking_manage', args=(location.slug, booking.id,))
     }
     text_content, html_content = render_templates(c, location, LocationEmailTemplate.NEW_BOOKING)
 
@@ -168,7 +168,7 @@ def new_booking_notify(booking):
 
 def subscription_note_notify(subscription):
     domain = Site.objects.get_current().domain
-    admin_path = urlresolvers.reverse('subscription_manage_detail', args=(subscription.location.slug, subscription.id,))
+    admin_path = reverse('subscription_manage_detail', args=(subscription.location.slug, subscription.id,))
     text_content = '''Howdy,\n\nA new note has been added to a subscription for %s %s. \n\nManage this subscription at %s%s.''' % (
             subscription.user.first_name , subscription.user.last_name, domain, admin_path
         )
@@ -188,7 +188,7 @@ def subscription_note_notify(subscription):
 
 def admin_new_subscription_notify(subscription):
     domain = Site.objects.get_current().domain
-    admin_path = urlresolvers.reverse('subscription_manage_detail', args=(subscription.location.slug, subscription.id,))
+    admin_path = reverse('subscription_manage_detail', args=(subscription.location.slug, subscription.id,))
     text_content = '''Howdy,\n\nA new subscription for %s %s has been added for %d/mo starting %s.\n\nManage this subscription at %s%s.''' % (
             subscription.user.first_name , subscription.user.last_name, subscription.price, str(subscription.start_date), domain, admin_path
         )
@@ -209,7 +209,7 @@ def admin_new_subscription_notify(subscription):
 
 def updated_booking_notify(booking):
     domain = Site.objects.get_current().domain
-    admin_path = urlresolvers.reverse('booking_manage', args=(booking.use.location.slug, booking.id,))
+    admin_path = reverse('booking_manage', args=(booking.use.location.slug, booking.id,))
     text_content = '''Howdy,\n\nA booking has been updated and requires your review.\n\nManage this booking at %s%s.''' % (domain, admin_path)
     recipients = []
     for admin in booking.use.location.house_admins.all():
@@ -233,8 +233,8 @@ def goodbye_email(use):
     c = {
         'first_name': use.user.first_name,
         'location': use.location,
-        'booking_url' : "https://" + domain + urlresolvers.reverse('booking_detail', args=(location.slug, use.booking.id,)),
-        'new_booking_url' : "https://" + domain + urlresolvers.reverse('location_stay', args=(location.slug,)),
+        'booking_url' : "https://" + domain + reverse('booking_detail', args=(location.slug, use.booking.id,)),
+        'new_booking_url' : "https://" + domain + reverse('location_stay', args=(location.slug,)),
     }
     text_content, html_content = render_templates(c, location, LocationEmailTemplate.DEPARTURE)
 
@@ -267,10 +267,10 @@ def guest_welcome(use):
         'location': use.location,
         'use': use,
         'current_email' : 'current@%s.mail.embassynetwork.com' % location.slug,
-        'site_url': "https://" + domain + urlresolvers.reverse('location_detail', args=(location.slug,)),
-        'events_url' : "https://" + domain + urlresolvers.reverse('gather_upcoming_events', args=(location.slug,)),
-        'profile_url' : "https://" + domain + urlresolvers.reverse('user_detail', args=(use.user.username,)),
-        'booking_url' : "https://" + domain + urlresolvers.reverse('booking_detail', args=(location.slug, use.booking.id,)),
+        'site_url': "https://" + domain + reverse('location_detail', args=(location.slug,)),
+        'events_url' : "https://" + domain + reverse('gather_upcoming_events', args=(location.slug,)),
+        'profile_url' : "https://" + domain + reverse('user_detail', args=(use.user.username,)),
+        'booking_url' : "https://" + domain + reverse('booking_detail', args=(location.slug, use.booking.id,)),
         'intersecting_bookings': intersecting_uses,
         'intersecting_events': intersecting_events,
         'residents': residents,

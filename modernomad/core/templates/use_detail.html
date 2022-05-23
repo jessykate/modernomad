@@ -58,7 +58,7 @@
       </div>
 
 
-  {% ifequal use.user user %}
+  {% if use.user == user %}
       <div class="res-modify-btn row-spacer">
           {% if past %}
               <p class="notice">This use is in the past and cannot be modified</p>
@@ -84,7 +84,7 @@
           <span class="pull-right"><em>Created {{use.created}}. Last updated {{use.updated}}.</em></span>
       </div>
 
-  {% endifequal %}
+  {% endif %}
 
   </div> <!-- end col -->
 

@@ -5,7 +5,7 @@ from bank.models import Account
 from .user import UserFactory
 
 
-class DRFTCurrencyFactory(factory.DjangoModelFactory):
+class DRFTCurrencyFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Currency
         # Currencies are created in migrations, so use that if it exists
@@ -14,7 +14,7 @@ class DRFTCurrencyFactory(factory.DjangoModelFactory):
     symbol = "Ɖ"
 
 
-class USDCurrencyFactory(factory.DjangoModelFactory):
+class USDCurrencyFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Currency
         # Currencies are created in migrations, so use that if it exists
@@ -23,7 +23,7 @@ class USDCurrencyFactory(factory.DjangoModelFactory):
     symbol = "$"
 
 
-class USDAccountFactory(factory.DjangoModelFactory):
+class USDAccountFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Account
     currency = factory.SubFactory(USDCurrencyFactory)
@@ -54,7 +54,7 @@ class USDAccountFactory(factory.DjangoModelFactory):
             self.owners.add(UserFactory())
 
 
-class DRFTAccountFactory(factory.DjangoModelFactory):
+class DRFTAccountFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Account
     currency = factory.SubFactory(DRFTCurrencyFactory)
@@ -85,13 +85,13 @@ class DRFTAccountFactory(factory.DjangoModelFactory):
             self.owners.add(UserFactory())
 
 
-class UserPrimaryAccountFactory(factory.DjangoModelFactory):
+class UserPrimaryAccountFactory(factory.django.DjangoModelFactory):
     pass
 
 
-class HouseAccountFactory(factory.DjangoModelFactory):
+class HouseAccountFactory(factory.django.DjangoModelFactory):
     pass
 
 
-class UseTransactionFactory(factory.DjangoModelFactory):
+class UseTransactionFactory(factory.django.DjangoModelFactory):
     pass

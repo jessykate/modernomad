@@ -1,4 +1,4 @@
-from django.conf.urls import include, url
+from django.urls import include, re_path
 from django.contrib import admin
 from modernomad.urls import user
 from django.conf import settings
@@ -9,7 +9,7 @@ import modernomad.views
 import modernomad.core.urls.location
 import bank.urls
 import gather.views
-import jwt_auth.views
+#import jwt_auth.views
 import api.urls
 import graphapi.urls
 import django.views
@@ -18,34 +18,34 @@ import django.views
 admin.autodiscover()
 
 urlpatterns = [
-    url(r'^$', modernomad.views.index),
-    url(r'^about/$', modernomad.views.about),
-    url(r'^membership/$', modernomad.views.membership, name="membership"),
-    url(r'^host/$', modernomad.views.host, name='host'),
-    url(r'^stay/$', modernomad.views.stay),
-    url(r'^404/$', modernomad.views.ErrorView),
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^people/', include(modernomad.urls.user)),
-    url(r'^locations/', include(modernomad.core.urls.location)),
-    url(r'^events/$', gather.views.upcoming_events_all_locations),
-    url(r'^events/emailpreferences/(?P<username>[\w\d\-\.@+_]+)/$', gather.views.email_preferences, name='gather_email_preferences'),
-    url(r'^accounts/', include(bank.urls)),
-    url(r'^drft/$', modernomad.views.drft),
+    re_path(r'^$', modernomad.views.index),
+    re_path(r'^about/$', modernomad.views.about),
+    re_path(r'^membership/$', modernomad.views.membership, name="membership"),
+    re_path(r'^host/$', modernomad.views.host, name='host'),
+    re_path(r'^stay/$', modernomad.views.stay),
+    re_path(r'^404/$', modernomad.views.ErrorView),
+    re_path(r'^admin/', admin.site.urls),
+    re_path(r'^people/', include(modernomad.urls.user)),
+    re_path(r'^locations/', include(modernomad.core.urls.location)),
+    re_path(r'^events/$', gather.views.upcoming_events_all_locations),
+    re_path(r'^events/emailpreferences/(?P<username>[\w\d\-\.@+_]+)/$', gather.views.email_preferences, name='gather_email_preferences'),
+    re_path(r'^accounts/', include(bank.urls)),
+    re_path(r'^drft/$', modernomad.views.drft),
 
     # various other useful things
-    url(r'^favicon\.ico$', RedirectView.as_view(url='/static/img/favicon.ico', permanent=True)),
-    url(r'^robots\.txt$', modernomad.views.robots),
+    re_path(r'^favicon\.ico$', RedirectView.as_view(url='/static/img/favicon.ico', permanent=True)),
+    re_path(r'^robots\.txt$', modernomad.views.robots),
 
     # api things
-    url(r'^api-token-auth/', jwt_auth.views.obtain_jwt_token),
-    url(r'^api/', include(api.urls)),
-    url(r'^', include(graphapi.urls)),
+    #re_path(r'^api-token-auth/', jwt_auth.views.obtain_jwt_token),
+    re_path(r'^api/', include(api.urls)),
+    re_path(r'^', include(graphapi.urls)),
 ]
 
 # media url hackery.
 media_url = settings.MEDIA_URL.lstrip('/').rstrip('/')
 urlpatterns += [
-    url(r'^%s/(?P<path>.*)$' % media_url, django.views.static.serve, {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
+    re_path(r'^%s/(?P<path>.*)$' % media_url, django.views.static.serve, {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
 ]
 
 if settings.DEBUG:
@@ -55,6 +55,6 @@ if settings.DEBUG:
         # path('__debug__/', include(debug_toolbar.urls)),
 
         # For django versions before 2.0:
-        url(r'^__debug__/', include(debug_toolbar.urls)),
+        re_path(r'^__debug__/', include(debug_toolbar.urls)),
 
     ] + urlpatterns

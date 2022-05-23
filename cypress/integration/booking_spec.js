@@ -1,24 +1,25 @@
 /// <reference types="Cypress" />
 const randomstring = require("randomstring");
 
-describe("Booking a room", function() {
-  it("works for the full happy path: existing logged in user, adding card, approved by admin, refunded", function() {
+describe("Booking a room", function () {
+  it("works for the full happy path: existing logged in user, adding card, approved by admin, refunded", function () {
     cy.login("pixel", "password");
     cy.visit("/");
     cy.contains("Embassy SF").click();
     cy.contains("View all rooms").click();
+    cy.get(".panel-body");
     cy.contains("Ada Lovelace").click({ force: true });
 
     // Fill in booking form
     cy.get("input[name=arrive]").focus();
     // Pick next month so all the dates are available
     cy.get(".react-datepicker__navigation--next").click({ force: true });
-    cy.get("[aria-label=day-13]").click({ force: true });
+    cy.get(".react-datepicker__day--013").click({ force: true });
     // Force de-select first date picker. For some reason immediately selecting second date
     // picker causes first not to close.
     cy.get("#network-footer").click("topLeft");
     cy.get("input[name=depart]").focus();
-    cy.get("[aria-label=day-16]").click({ force: true });
+    cy.get(".react-datepicker__day--016").click({ force: true });
     cy.get("[name=purpose]").type("Work.");
     cy.contains("Request to Book").click();
 
@@ -37,19 +38,12 @@ describe("Booking a room", function() {
     cy.login("embassysfadmin", "password");
     cy.visit("/locations/embassysf/manage/bookings/");
     // The booking we want is the only one by pixel
-    cy.contains("Pixel")
-      .parent()
-      .parent()
-      .find("a")
-      .first()
-      .click();
+    cy.contains("Pixel").parent().parent().find("a").first().click();
     cy.contains("Charge the user's card").click();
 
     // Dismiss email dialog
     // TODO: emails
-    cy.get("#emailModal")
-      .find(".close")
-      .click();
+    cy.get("#emailModal").find(".close").click();
 
     cy.contains("This booking is confirmed and paid.");
 
@@ -60,22 +54,23 @@ describe("Booking a room", function() {
     cy.contains("The booking has been cancelled.").click();
   });
 
-  it("shows an error when credit card is declined when added", function() {
+  it("shows an error when credit card is declined when added", function () {
     cy.login("pixel", "password");
     cy.visit("/locations/embassysf/stay/");
 
+    cy.get(".panel-body");
     cy.contains("Ada Lovelace").click({ force: true });
 
     // Fill in booking form
     cy.get("input[name=arrive]").focus();
     // Pick next month so all the dates are available
     cy.get(".react-datepicker__navigation--next").click({ force: true });
-    cy.get("[aria-label=day-13]").click({ force: true });
+    cy.get(".react-datepicker__day--013").click({ force: true });
     // Force de-select first date picker. For some reason immediately selecting second date
     // picker causes first not to close.
     cy.get("#network-footer").click("topLeft");
     cy.get("input[name=depart]").focus();
-    cy.get("[aria-label=day-16]").click({ force: true });
+    cy.get(".react-datepicker__day--016").click({ force: true });
     cy.get("[name=purpose]").type("Work.");
     cy.contains("Request to Book").click();
 
@@ -92,22 +87,23 @@ describe("Booking a room", function() {
     cy.contains("Your card was declined.");
   });
 
-  it("shows an error when credit card is declined at approval", function() {
+  it("shows an error when credit card is declined at approval", function () {
     cy.login("pixel", "password");
     cy.visit("/locations/embassysf/stay/");
 
+    cy.get(".panel-body");
     cy.contains("Ada Lovelace").click({ force: true });
 
     // Fill in booking form
     cy.get("input[name=arrive]").focus();
     // Pick next month so all the dates are available
     cy.get(".react-datepicker__navigation--next").click({ force: true });
-    cy.get("[aria-label=day-13]").click({ force: true });
+    cy.get(".react-datepicker__day--013").click({ force: true });
     // Force de-select first date picker. For some reason immediately selecting second date
     // picker causes first not to close.
     cy.get("#network-footer").click("topLeft");
     cy.get("input[name=depart]").focus();
-    cy.get("[aria-label=day-16]").click({ force: true });
+    cy.get(".react-datepicker__day--016").click({ force: true });
     cy.get("[name=purpose]").type("Work.");
     cy.contains("Request to Book").click();
 
@@ -127,33 +123,29 @@ describe("Booking a room", function() {
     cy.login("embassysfadmin", "password");
     cy.visit("/locations/embassysf/manage/bookings/");
     // The booking we want is the only one by pixel
-    cy.contains("Pixel")
-      .parent()
-      .parent()
-      .find("a")
-      .first()
-      .click();
+    cy.contains("Pixel").parent().parent().find("a").first().click();
     cy.contains("Charge the user's card").click();
 
     cy.contains("The card was declined");
     cy.contains("Charge the user's card"); // button to charge still exists, so it hasn't been marked as paid
   });
 
-  it("works for a new user", function() {
+  it("works for a new user", function () {
     cy.visit("/");
     cy.contains("Embassy SF").click();
     cy.contains("View all rooms").click();
+    cy.get(".panel-body");
     cy.contains("Ada Lovelace").click({ force: true });
 
     cy.get("input[name=arrive]").focus();
     // Pick next month so all the dates are available
     cy.get(".react-datepicker__navigation--next").click({ force: true });
-    cy.get("[aria-label=day-13]").click({ force: true });
+    cy.get(".react-datepicker__day--013").click({ force: true });
     // Force de-select first date picker. For some reason immediately selecting second date
     // picker causes first not to close.
     cy.get("#network-footer").click("topLeft");
     cy.get("input[name=depart]").focus();
-    cy.get("[aria-label=day-16]").click({ force: true });
+    cy.get(".react-datepicker__day--016").click({ force: true });
     cy.get("[name=purpose]").type("Work.");
     cy.contains("Request to Book").click();
 
@@ -176,21 +168,22 @@ describe("Booking a room", function() {
     cy.contains("Your booking has been submitted.");
   });
 
-  it("works for an existing logged out user", function() {
+  it("works for an existing logged out user", function () {
     cy.visit("/");
     cy.contains("Embassy SF").click();
     cy.contains("View all rooms").click();
+    cy.get(".panel-body");
     cy.contains("Ada Lovelace").click({ force: true });
 
     cy.get("input[name=arrive]").focus();
     // Pick next month so all the dates are available
     cy.get(".react-datepicker__navigation--next").click({ force: true });
-    cy.get("[aria-label=day-13]").click({ force: true });
+    cy.get(".react-datepicker__day--013").click({ force: true });
     // Force de-select first date picker. For some reason immediately selecting second date
     // picker causes first not to close.
     cy.get("#network-footer").click("topLeft");
     cy.get("input[name=depart]").focus();
-    cy.get("[aria-label=day-16]").click({ force: true });
+    cy.get(".react-datepicker__day--016").click({ force: true });
     cy.get("[name=purpose]").type("Work.");
     cy.contains("Request to Book").click();
 

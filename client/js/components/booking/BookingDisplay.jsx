@@ -1,6 +1,5 @@
 import React from 'react'
-import _ from 'lodash'
-import { Booking } from '../../models/Booking'
+import map from 'lodash/map'
 import MoneyDisplay from '../generic/Money';
 
 function LineItemDisplay(props) {
@@ -25,7 +24,7 @@ export default function BookingDisplay(props) {
   var lines = []
 
   if (lineItems.length > 0) {
-    lines = _.map(lineItems, (lineItem) => {
+    lines = map(lineItems, (lineItem) => {
       return <LineItemDisplay key={lineItem.id} lineItem={lineItem} />
     })
   } else {

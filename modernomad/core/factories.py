@@ -2,7 +2,7 @@ import factory
 from modernomad.core.models import *
 
 
-class LocationFactory(factory.DjangoModelFactory):
+class LocationFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Location
 
@@ -13,7 +13,7 @@ class LocationFactory(factory.DjangoModelFactory):
     welcome_email_days_ahead=2
 
 
-class ResourceFactory(factory.DjangoModelFactory):
+class ResourceFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Resource
 
@@ -22,7 +22,7 @@ class ResourceFactory(factory.DjangoModelFactory):
     location = factory.SubFactory(LocationFactory)
 
 
-class UserFactory(factory.DjangoModelFactory):
+class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = User
 

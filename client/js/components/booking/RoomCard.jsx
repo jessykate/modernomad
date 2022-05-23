@@ -1,7 +1,7 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import ImageCarousel from './ImageCarousel'
-import _ from 'lodash'
 
 
 export default class RoomCard extends React.Component {

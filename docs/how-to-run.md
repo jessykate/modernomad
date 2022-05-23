@@ -7,7 +7,7 @@ create a new virtual environment for this project:
 
 `python -m venv .venv` then `source .venv/bin/activate`
 
-or with virtualenv something like `mkvirtualenv modernomad` which will usually cause you to "enter" the virtualenv automatically, as will be reflected by the prompt now prefixed with (modernomad). 
+or with virtualenv something like `mkvirtualenv modernomad` which will usually cause you to "enter" the virtualenv automatically, as will be reflected by the prompt now prefixed with (modernomad).
 
 use the following commands to work with virtualenvwrapper: `workon` to work on a specific virtual env, `pip install blah` to install packages, `lssitepackages` to see packages installed in the virtual env.
 
@@ -36,7 +36,7 @@ To get webpack to work locally you should be able to do
 Then to run the webpack dev server. Run the following command.
 It'll now serve the javascript from localhost:3000 which is what django is
 configured for.
-- `node_modules/.bin/webpack-dev-server --port 3000 -w`
+- `node_modules/.bin/webpack-dev-server --port 3000`
 
 @todo This is a fix to make webpack work. Configuration needs tidying up by whoever knows how webpack works.
 - `cp webpack-stats-prod.json webpack-stats.json`
@@ -46,7 +46,7 @@ configured for.
 
 ## Configuration settings
 
-cp `.env.example .env` to create the local environment variables. 
+`cp .env.example .env` to create the local environment variables.
 
 If there is any local settings that you'd like to overwrite while developing you can always overwrite those in `settings/local.py`. Otherwise the project is set up to the biggest possible extent to use environment variables.
 

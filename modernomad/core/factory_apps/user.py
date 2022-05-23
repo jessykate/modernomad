@@ -6,7 +6,7 @@ from . import factory
 User = get_user_model()
 
 
-class UserFactory(factory.DjangoModelFactory):
+class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = User
         django_get_or_create = ('username',)
@@ -35,10 +35,10 @@ class SuperUserFactory(UserFactory):
     is_staff = True
 
 
-class UserProfileFactory(factory.DjangoModelFactory):
+class UserProfileFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = UserProfile
 
 
-class UserNote(factory.DjangoModelFactory):
+class UserNote(factory.django.DjangoModelFactory):
     pass

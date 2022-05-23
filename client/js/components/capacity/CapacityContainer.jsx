@@ -1,7 +1,10 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import CapacityManager from './CapacityManager'
 import ErrorDisplay from '../generic/ErrorDisplay'
-import _ from 'lodash'
+import sortBy from 'lodash/sortBy'
+import includes from 'lodash/includes'
+import reject from 'lodash/reject'
 import axios from 'axios'
 import moment from 'moment'
 
@@ -68,7 +71,7 @@ export default class CapacityContainer extends React.Component {
   }
 
   sortedCapacities(capacities) {
-    return _.sortBy(capacities, (capacity) => {
+    return sortBy(capacities, (capacity) => {
       return moment(capacity.start_date)
     })
   }
@@ -81,7 +84,7 @@ export default class CapacityContainer extends React.Component {
 
   /*
   insertCapacity(capacity) {
-    const withoutExisting = _.reject(this.state.upcomingCapacities, {id: capacity.id})
+    const withoutExisting = reject(this.state.upcomingCapacities, {id: capacity.id})
     const newCollection = this.sortedCapacities([...withoutExisting, capacity])
     this.setState({
       upcomingCapacities: newCollection
@@ -91,8 +94,8 @@ export default class CapacityContainer extends React.Component {
 
   deleteCapacity(deleted_capacities) {
     this.setState({
-        upcomingCapacities: _.reject(this.state.upcomingCapacities, (capacity) => {
-          return _.includes(deleted_capacities, capacity.id)
+        upcomingCapacities: reject(this.state.upcomingCapacities, (capacity) => {
+          return includes(deleted_capacities, capacity.id)
         })
     })
   }

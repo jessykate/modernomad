@@ -1,18 +1,17 @@
-import React from 'react'
-import ReactLoaderAdvanced from 'react-loader-advanced'
-import CircularProgress from 'material-ui/CircularProgress';
+import React from "react";
+import Skeleton from "react-loading-skeleton";
 
-function Loader(props) {
-  return (
-    <ReactLoaderAdvanced
-      show={!!props.loading}
-      backgroundStyle={{backgroundColor: '#FFFFFF', opacity: 0.7}}
-      message={<CircularProgress />}
-      hideContentOnLoad={true}
-    >
-      {props.children}
-    </ReactLoaderAdvanced>
-  )
+function Loader({ loading, children, renderChildren }) {
+  return loading ? (
+    <>
+      <h3>
+        <Skeleton />
+      </h3>
+      <p>
+        <Skeleton count={5} />
+      </p>
+    </>
+  ) : children || renderChildren()
 }
 
-export default Loader
+export default Loader;

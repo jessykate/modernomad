@@ -7,7 +7,7 @@
             <div role="tabpanel" class="tab-pane active" id="profile">
                 {% if not u.profile.bio and not u.profile.links and not u.profile.projects and not u.profile.sharing and not u.profile.discussion %}
 
-                    {% ifequal u user %} You have {% else %} {{u.first_name|title}} has {% endifequal %} not shared any profile information yet.
+                    {% if u == user %} You have {% else %} {{u.first_name|title}} has {% endif %} not shared any profile information yet.
 
                 {% else %}
                     <h4>About {{u.first_name|title}}:</h4>
