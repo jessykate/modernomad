@@ -1,7 +1,5 @@
 {% load core_tag_extras %}
 {% load static %}
-{% load render_bundle from webpack_loader %}
-{% load compress %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -12,16 +10,14 @@
         <meta name="description" content="A Global Housing Layer for the New World">
 
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700|Raleway:800" rel="stylesheet">
-
-        {% compress css %}
         <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
-        <link rel="stylesheet" type="text/less" href="{% static 'css/custom.less' %}" />
-        <link rel="stylesheet" href="{% static 'css/chosen.min.css' %}"></script>
+        <!-- <link rel="stylesheet" type="text/less" href="{% static 'css/custom.less' %}" /> -->
+        <link rel="stylesheet" href="{% static 'css/custom.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/chosen.min.css' %}">
         <link rel="stylesheet" href="{% static 'css/leaflet.css' %}" />
         <link rel="stylesheet" href="{% static 'css/react-datepicker.css' %}" />
         <link rel="stylesheet" href="{% static 'fonts/font-awesome-4.6.3/css/font-awesome.min.css' %}">
         <link rel="stylesheet" href="{% static 'css/flick/jquery-ui-1.9.1.custom.css' %}" />
-        {% endcompress %}
 
         <link rel="shortcut icon" href="/favicon.ico">
 
@@ -120,9 +116,6 @@
       };
     </script>
 
-    {% render_bundle 'main' %}
-    {% compress js %}
-
     <!-- JQuery -->
     <script src="{% static 'js/jquery-1.8.2.js' %}"></script>
     <script src="{% static 'js/jquery-ui-1.9.1.custom.js' %}"></script>
@@ -143,7 +136,6 @@
     });
 
     </script>
-    {% endcompress %}
 
     {% if GOOGLE_ANALYTICS_PROPERTY_ID %}
       {% include "snippets/google_analytics.html" %}

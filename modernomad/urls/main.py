@@ -1,18 +1,17 @@
-from django.urls import include, re_path
+from django.urls import include, re_path, path
 from django.contrib import admin
-from modernomad.urls import user
 from django.conf import settings
 from django.views.generic import RedirectView
 from django.http import HttpResponse, HttpResponseRedirect
-from rest_framework import routers, serializers, viewsets
+from modernomad.urls import user
 import modernomad.views
 import modernomad.core.urls.location
+import django.views
 import bank.urls
 import gather.views
-#import jwt_auth.views
 import api.urls
-import graphapi.urls
-import django.views
+# import jwt_auth.views
+# import graphapi.urls
 
 
 admin.autodiscover()
@@ -37,9 +36,9 @@ urlpatterns = [
     re_path(r'^robots\.txt$', modernomad.views.robots),
 
     # api things
-    #re_path(r'^api-token-auth/', jwt_auth.views.obtain_jwt_token),
+    # re_path(r'^api-token-auth/', jwt_auth.views.obtain_jwt_token),
     re_path(r'^api/', include(api.urls)),
-    re_path(r'^', include(graphapi.urls)),
+    # re_path(r'^', include(graphapi.urls)),
 ]
 
 # media url hackery.
@@ -49,12 +48,10 @@ urlpatterns += [
 ]
 
 if settings.DEBUG:
-    import debug_toolbar
-    urlpatterns = [
-        # For Django >= 2.0
-        # path('__debug__/', include(debug_toolbar.urls)),
-
-        # For django versions before 2.0:
-        re_path(r'^__debug__/', include(debug_toolbar.urls)),
-
-    ] + urlpatterns
+    try:
+        import debug_toolbar
+        urlpatterns = [
+            path('__debug__/', include(debug_toolbar.urls)),
+        ] + urlpatterns
+    except ImportError:
+        print("Django Debug Toolbar Not Installed!")
