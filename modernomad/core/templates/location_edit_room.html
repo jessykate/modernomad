@@ -1,0 +1,21 @@
+{% extends "location_edit.html" %}
+
+{% block sub-content %}
+
+<div class="row top-spacer">
+
+    <div class="col-md-3">
+        {% include 'snippets/location_manage_rooms_nav.html' %}
+    </div>
+
+    <div class="col-md-6">
+        {% include 'snippets/room_edit_form.html' %}
+    </div>        
+
+</div>
+
+{% endblock %}
+
+{% block extrajs %}
+  {% include 'snippets/room_edit_form_js.html' %}
+{% endblock %}

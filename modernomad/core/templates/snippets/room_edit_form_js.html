@@ -1,0 +1,60 @@
+{% load static %}
+
+<script type="text/javascript">
+    if ({{room_id}} > 0 ) {
+        window.renderReactComponent('react-app-{{room_id}}', 'CapacityContainer', {{room_capacity|safe}})
+    }
+</script>
+
+<script src="{% static 'js/jquery.validate.min.js' %}"></script>
+<script src="{% static 'js/chosen.jquery.min.js' %}"></script>
+<script>
+    if ('{{room_id}}' != "None") {
+        $("#manage_rooms_edit_room_{{room_id}}").addClass("active");
+        // relies on the DOM structure of bootstraps dropdown menus, fyi.
+        $("#manage_rooms_room_name_{{room_id}}").parent().parent().addClass("active");
+
+    } else {
+        $("#manage_rooms_new_room").addClass("active");
+    }
+
+    jQuery.validator.addMethod("imageExists", function(value, element) {
+        // will be None if there is no instance
+        return this.optional(element) || ('{{form.instance.image}}' != 'None')
+        }, "Image is required.");
+
+    //form validation
+    $(".room-form").validate({
+        rules: {
+            name: {
+                required: true
+            },
+            default_rate: {
+                required: true
+            },
+            description: {
+                required: true
+            },
+            image: {
+                imageExists: true
+            },
+            summary: {
+                required: true
+            },
+            cancellation_policy: {
+                required: true
+            }
+        }
+    })
+    // multiple select using search and tags.
+    $(".chosen-select").chosen({
+        no_results_text: "No user with that name.",
+        width: "95%",
+        placeholder_text_multiple: "Search by name."
+    });
+
+    $(".datepicker").datepicker({
+      minDate: 0
+    })
+
+</script>

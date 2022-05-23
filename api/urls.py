@@ -1,15 +1,15 @@
-from django.conf.urls import patterns, include, url
-from tastypie.api import Api
+from django.conf.urls import include, url
 
-from api.resources import UsersResource, UserBaseResource, UpcomingResource
+from rest_framework import routers
+from api.views.capacities import capacities, capacity_detail
+import rest_framework.urls
 
+# Routers provide an easy way of automatically determining the URL conf.
+router = routers.DefaultRouter()
 
-v1_api = Api(api_name='v1')
-v1_api.register(UsersResource())
-v1_api.register(UserBaseResource())
-v1_api.register(UpcomingResource())
-
-
-urlpatterns = patterns('',
-    url(r'', include(v1_api.urls)),
-)
+urlpatterns = [
+    url(r'^', include(router.urls)),
+    url(r'^capacities/$', capacities),
+    url(r'^capacity/(?P<capacity_id>[0-9]+)$', capacity_detail),
+    url(r'^api-auth/', include(rest_framework.urls, namespace='rest_framework')),
+]

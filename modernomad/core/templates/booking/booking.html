@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load static %}
+{% block pagetitle %}Embassy Network - {{location.name}} - Stay{% endblock %}
+
+{% block content %}
+<div id="room-container"></div>
+{% endblock %}
+
+{% block extrajs %}
+<script type="text/javascript">
+    window.renderReactComponent('room-container', 'RoomBooking', {{ react_data|safe }})
+</script>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "root.html" %}
+{% block pagetitle %}Embassy Network - Locations{% endblock %}
+
+{% block body %}
+
+<div class="text-center container" id="locations">
+
+    <h2 class="featurette-heading">Locations</h2>
+
+
+    {% for location in locations %}
+
+        <a href="{% url 'location_detail' location.slug %}" class="col-lg-4 col-md-6">
+            <div class="location-box">
+                <img src="{{MEDIA_URL}}{{location.profile_image}}" class="location-photo panel panel-default" width="336" height="344">
+                <div class="location-name">
+              <h2 class="bold">{{ location.name }}<br> <em class="small">{{ location.address}}</em></h2>
+            </div>
+            </div>
+        </a>
+    {% endfor %}
+</div>
+
+{% endblock %}

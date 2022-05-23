@@ -1,0 +1,183 @@
+<div id="dialog-confirm-send-welcome" title="Send Welcome Email">
+    <p>
+        <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+        The welcome email is normally
+        sent to the user automatically {{days_before_welcome_email}} days prior to the booking. Are you
+        sure you want to send it yourself now?
+    </p>
+</div>
+
+<div id="dialog-confirm-fee-remove" title="Remove this Bill Item?">
+    <p>
+        <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+        <p>This fee will be removed. If you want to reset the fees applied to this booking, use the "Reset Bill Fees" button.</p> 
+        <p>Are you sure?</p>
+    </p>
+</div>
+
+<div id="dialog-confirm-line-item-remove" title="Remove this Bill Item?">
+    <p>
+        <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+        This line item will be removed. Are you sure?
+    </p>
+</div>
+
+<div id="dialog-confirm-cancel" title="Cancel this Booking?">
+    <p>
+        <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+        This booking will be cancelled. Are you sure?
+    </p>
+</div>
+
+<div id="dialog-confirm-refund" title="Refund this Booking?">
+    <p>
+        <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+        This payment will be refunded. Are you sure?
+    </p>
+</div>
+
+<div id="dialog-warn-full" title="Warning! The room you are trying to book is full.">
+    <p>
+        <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+        You are trying to confirm a booking for a room that is showing
+        as full. Make sure you know what you are dong. Are you sure?
+    </p>
+</div>
+
+<div id="dialog-warn-charge" title="Are you sure?">
+    <p>
+        <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+        This will attempt to charge the user's card. 
+    </p>
+</div>
+
+{# FIXME: This must always be included in extrajs block. This really needs refactoring. #}
+<script>
+$("#dialog-warn-charge").dialog({
+    autoOpen: false,
+    modal: true,
+    buttons: {
+        "Yes, go for it": function () {
+            $("#bill-charge").submit();
+         },
+        "Cancel": function () {
+            $(this).dialog("close");
+        }
+    }
+});
+
+$(".button-to-charge-card").click(function (e) {
+        $("#dialog-warn-charge").dialog("open");
+    e.preventDefault();
+});
+
+$("#dialog-confirm-send-welcome").dialog({
+    autoOpen: false,
+    modal: true,
+    buttons: {
+        "Yes, Send": function () {
+            $("#res-action-send-welcome").submit();
+         },
+        "Do Not Send": function () {
+            $(this).dialog("close");
+        }
+    }
+});
+
+$("#res-action-send-welcome").click(function (e) {
+    $("#dialog-confirm-send-welcome").dialog("open");
+    e.preventDefault();
+});
+
+
+$("#dialog-confirm-fee-remove").dialog({
+    autoOpen: false,
+    modal: true,
+    buttons: {
+        "Yes, Remove": function () {
+            $(this).data('form-link').parentElement.submit();
+         },
+        "Do Not Remove": function () {
+            $(this).dialog("close");
+        }
+    }
+});
+
+$(".remove-fee").click(function (e) {
+    $("#dialog-confirm-fee-remove").data('form-link', this).dialog("open");
+    e.preventDefault();
+});
+
+
+$("#dialog-confirm-line-item-remove").dialog({
+    autoOpen: false,
+    modal: true,
+    buttons: {
+        "Yes, Remove": function () {
+            $(this).data('form-link').parentElement.submit();
+         },
+        "Do Not Remove": function () {
+            $(this).dialog("close");
+        }
+    }
+});
+
+$(".remove-line-item").click(function (e) {
+    $("#dialog-confirm-line-item-remove").data('form-link', this).dialog("open");
+    e.preventDefault();
+});
+
+$("#dialog-confirm-cancel").dialog({
+    autoOpen: false,
+    modal: true,
+    buttons: {
+        "Yes, Cancel": function () {
+            $("#res-cancel").submit();
+         },
+        "Do Not Cancel": function () {
+            $(this).dialog("close");
+        }
+    }
+});
+
+$("#res-cancel").click(function (e) {
+    $("#dialog-confirm-cancel").dialog("open");
+    e.preventDefault();
+});
+
+$("#dialog-confirm-refund").dialog({
+    autoOpen: false,
+    modal: true,
+    buttons: {
+        "Yes, Refund": function () {
+            $("#res-refund").submit();
+         },
+        "Do Not Refund": function () {
+            $(this).dialog("close");
+        }
+    }
+});
+
+$(".res-refund").click(function (e) {
+    $("#dialog-confirm-refund").dialog("open");
+    e.preventDefault();
+});
+
+
+$("#dialog-warn-full").dialog({
+    autoOpen: false,
+    modal: true,
+    width: 400,
+    buttons: {
+        "Yes, approve anyway": function () {
+            ajax_call(action_el);
+            $(this).dialog("close");
+        },
+        "Oops! Do not confirm": function () {
+            $(this).dialog("close");
+        }
+    }
+});
+
+
+</script>

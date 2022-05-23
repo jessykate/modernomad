@@ -1,0 +1,32 @@
+Good Morning! 
+
+Here is what's happening at {{ location.name }} today:
+
+{% if events_today %}
+    Events happening today:
+    {% for event in events_today %}
+        * {{ event.title|title }} at {{ event.start|date:'f A' }}
+          More details at https://{{ domain }}{% url 'gather_view_event' event.location.slug event.id event.slug %} 
+    {% endfor %}
+
+{% endif %}
+{% if arriving %}
+    People arriving - welcome!
+    {% for use in arriving %}
+        * {{ use.user.first_name }} {{ use.user.last_name }}, {{ use.arrive }} - {{ use.depart }} in {{ use.resource|safe }} 
+        https://{{ domain }}{% url 'booking_detail' use.location.slug use.booking.id %}
+    {% endfor %}
+
+{% endif %}
+{% if departing %}
+    People departing - fare forward and wonderful journeys!
+    {% for use in departing %}
+        * {{ use.user.first_name }} {{ use.user.last_name }}, {{ use.arrive }} - {{ use.depart }} from {{ use.resource|safe }} 
+        https://{{ domain }}{% url 'booking_detail' use.location.slug use.booking.id %}
+    {% endfor %}
+{% endif %}
+
+Thank you!
+{{ location.name }}
+
+

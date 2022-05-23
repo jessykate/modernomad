@@ -1,107 +1,155 @@
 {% load core_tag_extras %}
-{% load staticfiles %}
-
+{% load static %}
+{% load render_bundle from webpack_loader %}
+{% load compress %}
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>{% block pagetitle %}Embassy Network{% endblock %}</title>
-		<!-- responsive support -->
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="description" content="The Embassy Network is a housing network reinventing home for the creative age.">
-		<!-- Le styles -->
-		<link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
-		<link href="{% static 'css/custom.css' %}" rel="stylesheet">
-		<link rel="stylesheet" href="{% static 'css/leaflet.css' %}" />
-		<link rel="stylesheet" href="{% static 'fonts/font-awesome-4.3.0/css/font-awesome.min.css' %}">
-		<link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600,300,700' rel='stylesheet' type='text/css'>
-		<link rel="shortcut icon" href="/favicon.ico">
+    <head>
+        <meta charset="utf-8">
+        <title>{% block pagetitle %}Embassy Network{% endblock %}</title>
+        <!-- responsive support -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="A Global Housing Layer for the New World">
 
-		<!-- Le javascript -->
-		<link rel="stylesheet" href="{% static 'css/flick/jquery-ui-1.9.1.custom.css' %}" />
-		<script src="{% static 'js/jquery-1.8.2.js' %}"></script>
-		<script src="{% static 'js/jquery-ui-1.9.1.custom.js' %}"></script>
-		<script src="{% static 'js/bootstrap.js' %}"></script>
-		<script src="{% static 'js/leaflet.js' %}"></script>
-	
-		<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-		<!--[if lt IE 9]>
-		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-		<![endif]-->
-		{% block extrahead %}
-		{% endblock %}
-	</head>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700|Raleway:800" rel="stylesheet">
 
-	<body>
-		<div id="full-page-wrapper">
-			<div class="container-fluid">
-				<div class="row">
+        {% compress css %}
+        <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+        <link rel="stylesheet" type="text/less" href="{% static 'css/custom.less' %}" />
+        <link rel="stylesheet" href="{% static 'css/chosen.min.css' %}"></script>
+        <link rel="stylesheet" href="{% static 'css/leaflet.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/react-datepicker.css' %}" />
+        <link rel="stylesheet" href="{% static 'fonts/font-awesome-4.6.3/css/font-awesome.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/flick/jquery-ui-1.9.1.custom.css' %}" />
+        {% endcompress %}
 
-					<nav class="navbar navbar-default" id="nav-network" role="navigation">
-					<div class="navbar-header">
-						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
-							<span class="sr-only">Toggle navigation</span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-						</button>
-					</div>
-					<div class="collapse navbar-collapse" id="main-navbar">
-						<ul class="nav navbar-nav navbar-left">
-							<li><a class="navbar-brand" href="/">The Embassy <span class="highlight">Network</span></a></li>
-							<li><a href="{% url 'location_list' %}">Locations</a></li>
-							<li><a href="/membership">About accommodation & membership</a></li>
-							<li><a href="/host">Add your Community</a></li>
-							<!--
-							<li><a href="/resources">Resources</a></li>
-							<li><a href="/faq">FAQ</a></li>
-							-->
-						</ul>
+        <link rel="shortcut icon" href="/favicon.ico">
 
-						<ul class="nav navbar-nav navbar-right">		
-							{% if user.is_authenticated %}
-							<li class="dropdown">
-							<a class="dropdown-toggle" id="drop2" role="button" data-toggle="dropdown" href="#">
-								<i class="glyphicon glyphicon-user"></i> {{ user.get_full_name }} <b class="caret"></b>
-							</a>
-							<ul id="menu2" class="dropdown-menu" role="menu" aria-labelledby="drop2">
-								<li><a tabindex="-1" href="/people/{{user.username}}">View Profile</a></li>
-								<li><a tabindex="-1" href="/people/{{user.username}}/events/">My Events</a></li>
-								{% if user.is_superuser %}
-								<li><a tabindex="-1" href="{% url 'admin:index' %}">Django Admin</a></li>
-								{% endif %}
-								<li><a tabindex="-1" href="/people/logout/">Logout</a></li>
-							</ul>
-							</li>
-							{% endif %}
-							{% if not user.is_authenticated %}
-							<li><a href="/people/login/?next={{request.path}}">Login</a></li>
-							{% endif %}
-						</ul>
-					</div> <!-- end navbar-collapse -->
-					</nav>
-				</div> <!-- end row -->
-			</div> <!-- end container-fluid -->
+        {% block extrahead %}{% endblock %}
+    </head>
 
-			{% block body %}
-			{% endblock %}
-		</div>
-		{% block footer %}
-		{% endblock %}
+    <body>
+        <div id="full-page-wrapper">
+            <div class="container-fluid">
+                <div class="row">
 
-	<!-- javascript for every page -->
-	<script type="text/javascript">
+                    <nav class="navbar navbar-default" id="nav-network" role="navigation">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a href="/" class="navbar-brand"><span class="highlight"><img src="{% static 'img/en-logo-transparent.png' %}" class="logo" alt="" width="37" height="30"> Embassy Network</span></a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="main-navbar">
+                        <ul class="nav navbar-nav navbar-left">
+                            <li style="padding-top: 15px; padding-bottom:15px; color: #777; " class="hidden-xs hidden-sm">:: <em>Communities experimenting with culture and commoning.</em></li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <!-- <li><a class="locations-btn">Locations</a></li> -->
+                            {% if user.is_authenticated %}
+                            <li class="dropdown">
+                            <a class="dropdown-toggle" id="drop2" role="button" data-toggle="dropdown" href="#">
+                                {{ user.get_full_name }} <b class="caret"></b>
+                            </a>
+                            <ul id="menu2" class="dropdown-menu" role="menu" aria-labelledby="drop2">
+                                <li><a tabindex="-1" href="/people/{{user.username}}">View Profile</a></li>
+                                <li><a tabindex="-1" href="/people/{{user.username}}/events/">My Events</a></li>
+                                {% if user.profile.accounts %}
+                                    <li><a tabindex="-1" href="{% url 'account_list' %}">Accounts</a></li>
+                                {% endif %}
+                                {% if user.is_superuser %}
+                                    <li><a tabindex="-1" href="{% url 'admin:index' %}">Django Admin</a></li>
+                                {% endif %}
+                                <li><a tabindex="-1" href="/people/logout/">Logout</a></li>
+                            </ul>
+                            </li>
+                            {% endif %}
+                            {% if not user.is_authenticated %}
+                            <li><a href="/people/login/?next={{request.path}}">Login</a></li>
+                            {% endif %}
+                        </ul>
+                    </div> <!-- end navbar-collapse -->
+                    </nav>
+                </div> <!-- end row -->
+            </div> <!-- end container-fluid -->
 
-	</script>
+            {% block body %}
+            {% endblock %}
+        </div>
 
-	{% if GOOGLE_ANALYTICS_PROPERTY_ID %}
-	  {% include "snippets/google_analytics.html" %}
-	{% endif %}
-	
-	{% block extrajs %}
-	{% endblock %}
 
+        {% block footer %}
+        <div id="network-footer">
+            <div class="container text-center">
+                <div class="row">
+                    <h3>Commune with us on</h3>
+                    <div id="footer-socialmedia">
+                        <a href="https://twitter.com/embassynetwork" target="_blank">
+                            <span class="fa-stack fa-3x">
+                              <i class="fa fa-circle-thin fa-stack-2x"></i>
+                              <i class="fa fa-twitter fa-stack-1x"></i>
+                            </span>
+                        </a>
+                        <a href="https://www.facebook.com/embassynetwork" target="_blank">
+                            <span class="fa-stack fa-3x">
+                              <i class="fa fa-circle-thin fa-stack-2x"></i>
+                              <i class="fa fa-facebook fa-stack-1x"></i>
+                            </span>
+                        </a>
+                        <a href="https://medium.com/embassy-network" target="_blank">
+                            <span class="fa-stack fa-3x">
+                              <i class="fa fa-circle-thin fa-stack-2x"></i>
+                              <i class="fa fa-medium fa-stack-1x"></i>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="text-muted">
+                <h5>© Embassy Network</h5>
+              </div>
+                </div>
+            </div>
+        </div>
+        {% endblock %}
+
+    <script type="text/javascript">
+      window.modernomadSettings = {
+        MEDIA_URL: "{{ MEDIA_URL|escapejs }}"
+      };
+    </script>
+
+    {% render_bundle 'main' %}
+    {% compress js %}
+
+    <!-- JQuery -->
+    <script src="{% static 'js/jquery-1.8.2.js' %}"></script>
+    <script src="{% static 'js/jquery-ui-1.9.1.custom.js' %}"></script>
+
+    <!-- Le javascript -->
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script src="{% static 'js/leaflet.js' %}"></script>
+
+    <!-- javascript for every page -->
+    <script type="text/javascript">
+
+    // call to action scroll
+    $(".locations-btn").click(function() {
+        mixpanel.track("Locations button clicked");
+        $('html, body').animate({
+                scrollTop: $("#locations").offset().top
+        }, 500);
+    });
+
+    </script>
+    {% endcompress %}
+
+    {% if GOOGLE_ANALYTICS_PROPERTY_ID %}
+      {% include "snippets/google_analytics.html" %}
+    {% endif %}
+
+    {% block extrajs %}
+    {% endblock %}
   </body>
 </html>
-
-

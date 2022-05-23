@@ -1,0 +1,138 @@
+{% extends "location_edit.html" %}
+{% load static %}
+
+{% block sub-content %}
+
+<div class="top-spacer">
+    <strong>Add New Admin</strong>
+    <form method="post" action=".">
+        {% csrf_token %}
+        <div class="row ui-widget">
+            <div class="col-sm-2 col-sm-offset-1">
+                <select class="form-control chosen-select" id="admin-username" name="admin_username"/>
+                    <option disabled selected value> -- select an option -- </option>
+                    {% for u in all_users %}
+                        <option value="{{u.username}}">{{u.first_name}} {{u.last_name}}</option> 
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-sm-2"><input class="form-control" name="action" type="submit" value="Add"></div>
+        </div>
+    </form>
+</div>
+
+<div class="top-spacer">
+    <strong>Current Admins</strong>
+    {% for u in location.house_admins.all %}
+        <form method="post" action=".">
+            <input type="hidden" name="admin_username" value="{{ u.username }}"/>
+            <div class="row sm-row-spacer">
+                <div class="col-sm-2 col-sm-offset-1">{{ u.first_name }} {{u.last_name}}</div>
+                <div class="col-sm-2"><input class="form-control" name="action" type="submit" value="Remove"></div>
+            </div>
+            {% csrf_token %}
+        </form>
+    {% endfor %}
+</div>
+
+<hr>
+
+<div class="top-spacer">
+    <strong>Current Residents with Backings</strong>
+    {% for u in location.residents %}
+            <div class="row sm-row-spacer">
+                <div class="col-sm-2 col-sm-offset-1"><a href="{% url 'user_detail' u.username %}">{{ u.first_name }} {{u.last_name}}</a></div>
+            </div>
+            {% csrf_token %}
+        </form>
+    {% endfor %}
+</div>
+<div>
+    * Add New Residents by creating a backing for them.
+</div>
+
+
+<hr>
+
+<div>
+    <strong>Add New Event Admin</strong>
+    <form method="post" action=".">
+        {% csrf_token %}
+        <div class="row ui-widget">
+            <div class="col-sm-2 col-sm-offset-1">
+                <select class="form-control chosen-select" id="event-admin-username" name="event_admin_username"/>
+                    <option disabled selected value> -- select an option -- </option>
+                    {% for u in all_users %}
+                        <option value="{{u.username}}">{{u.first_name}} {{u.last_name}}</option> 
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-sm-2"><input class="form-control" name="action" type="submit" value="Add"></div>
+        </div>
+    </form>
+</div>
+
+<div class="top-spacer">
+    <strong>Current Event Admins</strong>
+    {% for u in location.event_admin_group.users.all %}
+        <form method="post" action=".">
+            <input type="hidden" name="event_admin_username" value="{{ u.username }}"/>
+            <div class="row sm-row-spacer">
+                <div class="col-sm-2 col-sm-offset-1">{{ u.first_name }} {{u.last_name}}</div>
+                <div class="col-sm-2"><input class="form-control" name="action" type="submit" value="Remove"></div>
+            </div>
+            {% csrf_token %}
+        </form>
+    {% endfor %}
+</div>
+
+<hr>
+
+<div>
+    <strong>Add New Readonly Admin</strong>
+    <p>Readonly admins do not show up as residents or admins, and do not receive emails. They can view the payments, occupancy, calendar, and booking detail (not manage) pages.</p>
+    <form method="post" action=".">
+        {% csrf_token %}
+        <div class="row ui-widget">
+            <div class="col-sm-2 col-sm-offset-1">
+                <select class="form-control chosen-select" id="readonly-admin-username" name="readonly_admin_username"/>
+                    <option disabled selected value> -- select an option -- </option>
+                    {% for u in all_users %}
+                        <option value="{{u.username}}">{{u.first_name}} {{u.last_name}}</option> 
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-sm-2"><input class="form-control" name="action" type="submit" value="Add"></div>
+        </div>
+    </form>
+</div>
+
+<div class="top-spacer">
+    <strong>Current Readonly Admins</strong>
+    {% for u in location.readonly_admins.all %}
+        <form method="post" action=".">
+            <input type="hidden" name="readonly_admin_username" value="{{ u.username }}"/>
+            <div class="row sm-row-spacer">
+                <div class="col-sm-2 col-sm-offset-1">{{ u.first_name }} {{u.last_name}}</div>
+                <div class="col-sm-2"><input class="form-control" name="action" type="submit" value="Remove"></div>
+            </div>
+            {% csrf_token %}
+        </form>
+    {% endfor %}
+</div>
+
+{% endblock %}
+
+{% block extrajs %}
+    <script src="{% static 'js/chosen.jquery.min.js' %}"></script>
+    <script>
+
+    $(".chosen-select").chosen({
+        no_results_text: "No user with that name.",
+        width: "95%",
+        placeholder_text: "Search by name."
+    });
+
+
+    </script>
+{% endblock %}

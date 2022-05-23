@@ -1,0 +1,103 @@
+{% extends "accounts_base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="top-spacer-large">
+{% include 'snippets/messages.html' %}
+
+<h1>{{request.user.first_name}}'s Accounts</h1>
+</div>
+
+
+{% regroup accounts by currency as accounts_by_currency %}
+{% if accounts_by_currency|length == 0 %}
+  <h4>You have no accounts.</h4>
+{% endif %}
+{% for account in accounts_by_currency %}
+<h3>{{account.grouper}} <span class="smaller">({{account.grouper.symbol}})</span></h3>
+    <table class="table">
+        <tr class="row">
+            <th class="col-md-1">Primary</th>
+            <th class="col-md-6">Name</th>
+            <th class="col-md-4">Owners</th>
+            <th class="col-md-1">Balance</th>
+        </tr>
+        {% for a in account.list %}
+        <tr class="row">
+            <td class="col-md-1">
+                {% if request.user.profile in a.primary_for.all %} <i class="fa fa-star text-warning"></i>{% endif %}
+            </td>
+            <td class="col-md-6">
+                <a href="{% url 'account_detail' a.id %}">{{a.name}}</a>
+            </td>
+            <td class="col-md-4">
+                {{ a.owner_names|join:", "|default:"--"  }}
+            </td>
+            <td class="col-md-1">
+                {% if a.get_balance > 0 %}
+                    <span>{{a.currency.symbol}}{{ a.get_balance }}</span>
+                {% else %}
+                    <span class="text-muted">{{a.currency.symbol}}{{ a.get_balance }}</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endfor %}
+
+<div class="top-spacer-large">
+<h3>Transfer DRFT (Ɖ)</h3>
+<div class="col-sm-6 well">
+  <form id="transfer-form" class="form" method="post">
+    {% csrf_token %}
+    {% for field in transaction_form %}
+      <div class="form-group">
+        {{ field.errors }}
+        {{ field.label_tag }}
+        <span class="form-help-text">{{ field.help_text}}</span>
+        {{ field }}
+      </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-default">Submit</button>
+  </form>
+</div>
+</div>
+{% endblock %}
+
+{% block extrajs %}
+<script src="{% static 'js/chosen.jquery.min.js' %}"></script>
+<script src="{% static 'js/jquery.validate.min.js' %}"></script>
+<script>
+  $(".chosen-select").chosen();
+  // jQuery validate ignores the hidden element, and the Chosen plugin adds
+  // visibility:hidden. need to tell validate not to ignore hidden select
+  // elements. 
+  $.validator.setDefaults({ ignore: ":hidden:not(select)" }) 
+  $.validator.addMethod('positiveInteger',
+    function (str) { 
+        var n = Math.floor(Number(str));
+        return String(n) === str && n >= 0;
+    }, 'Please enter a positive whole number.');
+
+  $("#transfer-form").validate({
+      rules: {
+        'from_account': {
+            required: true
+
+        },
+        'to_account': {
+            required: true
+
+        },
+        amount: {
+            required: true,
+            positiveInteger: true
+        },
+        reason: {
+            required: true
+        }
+      }
+  })
+</script>
+{% endblock %}
