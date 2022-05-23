@@ -1,0 +1,57 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[requires]
+python_version = "3.9"
+
+[scripts]
+pip-review = "pip list --outdated"
+
+[dev-packages]
+flake8 = "*"
+ipython = "*"
+black = "*"
+
+[packages]
+django-compressor = "*"
+django-debug-toolbar = "*"
+django-environ = "*"
+django-extensions = "*"
+django-filter = ">=3.0.0b7"
+django3-flatpages-tinymce = "*"
+django-ical = "*"
+django-imagekit = "*"
+django-jwt-auth = "*"
+django-uuidfield = "*"
+django-webpack-loader = "==1.1.0"
+djangorestframework = "*"
+freezegun = "*"
+graphene-django = "==3.0.0b7"
+graphene = "*"
+graphql-core = "*"
+graphql-relay = "*"
+icalendar = "*"
+lxml = "*"
+maya = "*"
+psycopg2 = "*"
+psycopg2-binary = "*"
+python-dateutil = "*"
+pytz = "*"
+requests = "*"
+rules = "*"
+six = "*"
+stripe = "*"
+gunicorn = "*"
+whitenoise = "*"
+django-storages = "*"
+boto3 = "*"
+sentry-sdk = "*"
+factory-boy = "*"
+django-basicauth = "*"
+django-cors-headers = "*"
+Django = "*"
+Faker = "*"
+Markdown = "*"
+Pillow = "*"
