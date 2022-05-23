@@ -37,4 +37,3 @@ sentry-sdk
 factory_boy
 django-basicauth
 Pillow
-django-cors-headers
