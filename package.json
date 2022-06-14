@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "dependencies": {},
   "devDependencies": {
-    "cypress": "^9.6.1",
+    "cypress": "^10.1.0",
     "randomstring": "^1.2.2"
   },
   "scripts": {
