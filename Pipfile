@@ -42,13 +42,14 @@ maya = "*"
 python-dateutil = "*"
 pytz = "2022.1"
 requests = "~=2.28"
-rules = "*"
-six = "*"
-stripe = "*"
+stripe = "~=3.4"
 sentry-sdk = "*"
 factory-boy = "*"
-Faker = "*"
 Markdown = "*"
+
+# Maybe Remove?
+Faker = "*"
+rules = "*"
 
 # To Remove
 #graphene-django = "==3.0.0b7"
