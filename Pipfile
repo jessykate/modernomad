@@ -1,0 +1,60 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[requires]
+python_version = "3.9"
+
+[scripts]
+django = "python ./manage.py runserver"
+pip-review = "pip list --outdated"
+
+[dev-packages]
+django-debug-toolbar = "*"
+flake8 = "*"
+ipython = "*"
+black = "*"
+
+[packages]
+Django = "~=4.0"
+Pillow = "~=9.1"
+psycopg2-binary = "~=2.9"
+boto3 = "~=1.23"
+gunicorn = "~=20.1"
+whitenoise = "~=6.2"
+djangorestframework = "~=3.13"
+django-storages = "~=1.12"
+django-basicauth = "*"
+django-compressor = "*"
+django-cors-headers = "*"
+django-environ = "*"
+django-extensions = "*"
+django-filter = ">=3.0.0b7"
+django3-flatpages-tinymce = "*"
+django-ical = "*"
+django-imagekit = "*"
+django-uuidfield = "*"
+freezegun = "*"
+icalendar = "*"
+lxml = "~=4.9"
+maya = "*"
+python-dateutil = "*"
+pytz = "2022.1"
+requests = "~=2.28"
+stripe = "~=3.4"
+sentry-sdk = "*"
+factory-boy = "*"
+Markdown = "*"
+
+# Maybe Remove?
+Faker = "*"
+rules = "*"
+
+# To Remove
+#graphene-django = "==3.0.0b7"
+#graphene = "*"
+#graphql-core = "*"
+#graphql-relay = "*"
+#django-webpack-loader = "==1.5.0"
+#django-jwt-auth = "*"

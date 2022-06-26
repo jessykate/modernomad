@@ -202,11 +202,8 @@ INSTALLED_APPS = [
     'compressor',
     'django_extensions',
     'django_filters',
-    'graphene_django',
     'imagekit',
-    'rest_framework',
     'rules.apps.AutodiscoverRulesConfig',
-    'webpack_loader',
     'corsheaders',
 
     # modernomad
@@ -215,7 +212,12 @@ INSTALLED_APPS = [
     'gather',
     'modernomad',
     'api',
-    'graphapi',
+
+    # To Remove --JLS
+    # 'rest_framework',
+    # 'graphene_django',
+    # 'webpack_loader',
+    # 'graphapi',
 ]
 
 COMPRESS_PRECOMPILERS = (
@@ -304,4 +306,3 @@ else:
 
 #DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-
