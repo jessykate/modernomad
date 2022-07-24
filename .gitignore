@@ -21,3 +21,5 @@ static/CACHE/
 /node_modules
 client/dist/
 client/webpack-stats-prod.json
+client/package-lock.json
+client/yarn.lock
